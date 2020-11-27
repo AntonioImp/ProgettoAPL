@@ -1,0 +1,45 @@
+import pymysql
+
+class DBHelper:
+
+    def __init__(self):
+        self.host = "localhost"
+        self.user = "root"
+        self.password = "root"
+        self.db = "gestione_tamponi"
+
+    def __connect__(self):
+        self.con = pymysql.connect(host=self.host,
+                                   user=self.user,
+                                   password=self.password,
+                                   db=self.db,
+                                   cursorclass=pymysql.cursors.DictCursor)
+        self.cur = self.con.cursor()
+
+    def __disconnect__(self):
+        self.con.close()
+
+    def fetch(self, sql):
+        try:
+            self.__connect__()
+            self.cur.execute(sql)
+            result = self.cur.fetchall()
+            self.__disconnect__()
+            return result
+        except:
+            self.con.rollback()
+            return False
+
+    def execute(self, sql):
+        try:
+            self.__connect__()
+            self.cur.execute(sql)
+            self.con.commit()
+            self.__disconnect__()
+            return True
+        except:
+            self.con.rollback()
+            return False
+        
+    def lastInsertId(self):
+        return self.cur.lastrowid
