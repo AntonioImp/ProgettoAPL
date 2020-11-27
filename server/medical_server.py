@@ -126,10 +126,12 @@ def insertDoc():
         }
         Doc = doc.Doc(docData)
         res = Doc.insertDoc(medId)
-        if len(res) == 1:
+        if len(res) == 1 and res[0] == True:
             return "Dottore già in DB. Aggiunto solo ai dipendenti del medical center"
-        else:
+        elif len(res) == 2 and res[0] == True and res[1] == True:
             return "Dottore inserito"
+        else:
+            return "Errore nell'inserimento"
     else:
         return "Autenticazione fallita"
 
