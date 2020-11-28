@@ -53,29 +53,26 @@ def logout():
     return "0" #->"Logout effettuato"
 
 
-""" Parametri da passare al metodo updateMedicalcenter: token, dati medical center (con id) """
+""" Parametri da passare al metodo updateMedicalcenter: token, dati medical center """
 @medical_server.route("/medicalupdate", methods = ["POST"])
 def updateMedicalcenter():
     token = request.json["token"]
     if token in session:
         medId = session[token]
-        if medId == request.json["id"]:
-            medicalData = {
-                "p_IVA": request.json["p_IVA"],
-                "phone": request.json["phone"],
-                "mail": request.json["mail"],
-                "CAP": request.json["CAP"],
-                "city": request.json["city"],
-                "street": request.json["street"],
-                "n_cv": request.json["n_cv"]
-            }
-            medical = med.Medicalcenter(medId)
-            if medical.updateMedicalcenter(medicalData) == True:
-                return "0" #->"Aggiornamento completato"
-            else:
-                return "-1" #->"Aggiornamento fallito"
+        medicalData = {
+            "p_IVA": request.json["p_IVA"],
+            "phone": request.json["phone"],
+            "mail": request.json["mail"],
+            "CAP": request.json["CAP"],
+            "city": request.json["city"],
+            "street": request.json["street"],
+            "n_cv": request.json["n_cv"]
+        }
+        medical = med.Medicalcenter(medId)
+        if medical.updateMedicalcenter(medicalData) == True:
+            return "0" #->"Aggiornamento completato"
         else:
-            return "-2" #->"Id non modificabile"
+            return "-1" #->"Aggiornamento fallito"
     else:
         return "-3" #->"Autenticazione fallita"
 
