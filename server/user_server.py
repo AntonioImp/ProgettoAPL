@@ -49,7 +49,7 @@ def signup():
 @user_server.route("/logout", methods = ["GET"])
 def logout():
     session.pop(request.args["token"])
-    return "Logout effettuato"
+    return "True"
 
 
 """ Parametri da passare al metodo userupdate: token, dati utente aggiornati """    
@@ -70,13 +70,13 @@ def updateUser():
                       'n_cv': request.json["n_cv"]}
             user = u.User(session[token])
             if user.updateUser(userData) == True:
-                return "Aggiornamento completato"
+                return "0" #->"Aggiornamento completato"
             else:
-                return "Aggiornamento fallito"
+                return "-1" #->"Aggiornamento fallito"
         else:
-            return "Codice Fiscale non modificabile"
+            return "-2" #->"Codice Fiscale non modificabile"
     else:
-        return "Autenticazione fallita"
+        return "-3" #->"Autenticazione fallita"
     
     
 """ Parametri da passare al metodo passupdate: token, nuova password """
@@ -86,11 +86,11 @@ def updatePassword():
     if token in session:
         user = u.User(session[token])
         if user.updatePassword(request.json["pass"]) == True:
-            return "Password aggiornata"
+            return "0" #->"Password aggiornata"
         else:
-            return "Aggiornamento fallito"
+            return "-1" #->"Aggiornamento fallito"
     else:
-        return "Autenticazione fallita"
+        return "-3" #->"Autenticazione fallita"
     
 
 """ Parametri da passare al metodo delete: token, password """
@@ -101,13 +101,13 @@ def delete():
         user = u.User(session[token])
         if user.getPassword() == request.json["pass"]:
             if user.deleteUser() == True:
-                return "Account eliminato"
+                return "0" #->"Account eliminato"
             else:
-                return "Errore eliminazione"
+                return "-1" #->"Errore eliminazione"
         else:
-            return "Password errata"
+            return "-2" #->"Password errata"
     else:
-        return "Autenticazione fallita"
+        return "-3" #->"Autenticazione fallita"
     
 
 if __name__ == "__main__":
