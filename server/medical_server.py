@@ -76,7 +76,7 @@ def updateMedicalcenter():
         else:
             return "-1" #->"Aggiornamento fallito"
     else:
-        return "-3" #->"Autenticazione fallita"
+        return "-2" #->"Autenticazione fallita"
 
 
 """ Parametri da passare al metodo passupdate: token, nuova password """
