@@ -76,9 +76,9 @@ def updateUser():
             else:
                 return "-1" #->"Aggiornamento fallito"
         else:
-            return "-2" #->"Codice Fiscale non modificabile"
+            return "-3" #->"Codice Fiscale non modificabile"
     else:
-        return "-3" #->"Autenticazione fallita"
+        return "-2" #->"Autenticazione fallita"
     
     
 """ Parametri da passare al metodo passupdate: token, nuova password """
@@ -92,7 +92,7 @@ def updatePassword():
         else:
             return "-1" #->"Aggiornamento fallito"
     else:
-        return "-3" #->"Autenticazione fallita"
+        return "-2" #->"Autenticazione fallita"
     
 
 """ Parametri da passare al metodo resetPassword: CF """
@@ -140,9 +140,9 @@ def delete():
             else:
                 return "-1" #->"Errore eliminazione"
         else:
-            return "-2" #->"Password errata"
+            return "-3" #->"Password errata"
     else:
-        return "-3" #->"Autenticazione fallita"
+        return "-2" #->"Autenticazione fallita"
     
 
 if __name__ == "__main__":
