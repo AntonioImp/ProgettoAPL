@@ -59,24 +59,21 @@ def logout():
 def updateUser():
     token = request.json["token"]
     if token in session:
-        if session[token] == request.json["CF"]:
-            userData = {'CF': request.json["CF"],
-                      'name': request.json["name"],
-                      'surname': request.json["surname"],
-                      'phone': request.json["phone"],
-                      'mail': request.json["mail"],
-                      'age': request.json["age"],
-                      'CAP': request.json["CAP"],
-                      'city': request.json["city"],
-                      'street': request.json["street"],
-                      'n_cv': request.json["n_cv"]}
-            user = u.User(session[token])
-            if user.updateUser(userData) == True:
-                return "0" #->"Aggiornamento completato"
-            else:
-                return "-1" #->"Aggiornamento fallito"
+        userData = {'CF': session[token],
+                    'name': request.json["name"],
+                    'surname': request.json["surname"],
+                    'phone': request.json["phone"],
+                    'mail': request.json["mail"],
+                    'age': request.json["age"],
+                    'CAP': request.json["CAP"],
+                    'city': request.json["city"],
+                    'street': request.json["street"],
+                    'n_cv': request.json["n_cv"]}
+        user = u.User(session[token])
+        if user.updateUser(userData) == True:
+            return "0" #->"Aggiornamento completato"
         else:
-            return "-3" #->"Codice Fiscale non modificabile"
+            return "-1" #->"Aggiornamento fallito"
     else:
         return "-2" #->"Autenticazione fallita"
     
