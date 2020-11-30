@@ -135,6 +135,7 @@ def delete():
         user = u.User(session[token])
         if user.getPassword() == request.json["pass"]:
             if user.deleteUser() == True:
+                session.pop(token)
                 return "0" #->"Account eliminato"
             else:
                 return "-1" #->"Errore eliminazione"

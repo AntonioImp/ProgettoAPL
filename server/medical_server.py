@@ -133,6 +133,7 @@ def delete():
         medical = med.Medicalcenter(session[token])
         if medical.getPassword() == request.json["pass"]:
             if medical.deleteMedicalcenter() == True:
+                session.pop(token)
                 return "0" #->"Account eliminato"
             else:
                 return "-1" #->"Errore eliminazione"
