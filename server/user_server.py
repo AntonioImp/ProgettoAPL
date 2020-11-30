@@ -2,6 +2,8 @@ from flask import Blueprint, request
 import secrets
 import string
 import Class.user as u
+import smtplib
+from smtplib import SMTPException
 
 user_server = Blueprint("user_server", __name__, static_folder = "static")
 session = {}
@@ -85,13 +87,45 @@ def updatePassword():
     token = request.json["token"]
     if token in session:
         user = u.User(session[token])
-        if user.updatePassword(request.json["pass"]) == True:
+        if user.updatePassword(request.json["pass"]):
             return "0" #->"Password aggiornata"
         else:
             return "-1" #->"Aggiornamento fallito"
     else:
         return "-3" #->"Autenticazione fallita"
     
+
+""" Parametri da passare al metodo resetPassword: CF """
+@user_server.route("/passreset", methods = ["POST"])
+def resetPassword():
+    user = u.User(request.json["CF"])
+    userData = user.getUser()
+    if userData != False:
+        newPass = token_generator(20)
+        oldPass = user.getPassword()
+        if user.updatePassword(newPass):
+            messaggio = "From: From Covid-19 Booking System <from@fromdomain.com>\n"
+            messaggio += "To: To " + userData["CF"] + " <" + userData["mail"] + ">\n"
+            messaggio += "Subject: Reset password for " + userData["CF"] + "\n\n"
+            messaggio += "Hello " + userData["CF"] + ",\nyour new password is " + newPass + "."
+            messaggio += "\n\nThis is an automatic sending system, do not reply to this email."
+            try:
+                email = smtplib.SMTP("smtp.gmail.com", 587)
+                email.ehlo()
+                email.starttls()
+                email.login("cvhomeworkfinal@gmail.com", "123qwerty@")
+                email.sendmail("cvhomeworkfinal@gmail.com", userData["mail"], messaggio)
+                email.quit()
+            except SMTPException:
+                user.updatePassword(oldPass)
+                return "-3" #->"Errore invio mail. Password ripristinata all'originale."
+
+            return "0" #->"Password modificata"
+        else:
+            return "-1" #->"Errore modifica password"
+    else:
+        return "-2" #->"Utente non trovato"
+
 
 """ Parametri da passare al metodo delete: token, password """
 @user_server.route("/delete", methods = ["POST"])

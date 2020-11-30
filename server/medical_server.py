@@ -3,6 +3,8 @@ import secrets
 import string
 import Class.medicalcenter as med
 import Class.doc as doc
+import smtplib
+from smtplib import SMTPException
 
 medical_server = Blueprint("medical_server", __name__, static_folder = "static")
 session = {}
@@ -89,6 +91,38 @@ def updatePassword():
             return "-1" #->"Aggiornamento fallito"
     else:
         return "-2" #->"Autenticazione fallita"
+
+
+""" Parametri da passare al metodo resetPassword: CF """
+@medical_server.route("/passreset", methods = ["POST"])
+def resetPassword():
+    medical = med.Medicalcenter(request.json["id"])
+    medicalData = medical.getMedicalcenter()
+    if medicalData != False:
+        newPass = token_generator(20)
+        oldPass = medical.getPassword()
+        if medical.updatePassword(newPass):
+            messaggio = "From: From Covid-19 Booking System <from@fromdomain.com>\n"
+            messaggio += "To: To " + str(medicalData["id"]) + " <" + medicalData["mail"] + ">\n"
+            messaggio += "Subject: Reset password for " + str(medicalData["id"]) + "\n\n"
+            messaggio += "Hello " + str(medicalData["id"]) + ",\nyour new password is " + newPass + "."
+            messaggio += "\n\nThis is an automatic sending system, do not reply to this email."
+            try:
+                email = smtplib.SMTP("smtp.gmail.com", 587)
+                email.ehlo()
+                email.starttls()
+                email.login("cvhomeworkfinal@gmail.com", "123qwerty@")
+                email.sendmail("cvhomeworkfinal@gmail.com", medicalData["mail"], messaggio)
+                email.quit()
+            except SMTPException:
+                medical.updatePassword(oldPass)
+                return "-3" #->"Errore invio mail. Password ripristinata all'originale."
+
+            return "0" #->"Password modificata"
+        else:
+            return "-1" #->"Errore modifica password"
+    else:
+        return "-2" #->"Utente non trovato"
 
 
 """ Parametri da passare al metodo delete: token, password """
