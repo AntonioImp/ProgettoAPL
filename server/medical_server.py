@@ -180,7 +180,7 @@ def getDocAssignment():
         json += "}"
         return json
     else:
-        return "-1" #->"Autenticazione fallita"
+        return "-2" #->"Autenticazione fallita"
 
 
 """ Parametri da passare al metodo updateDoc: token, dati doc """
@@ -204,7 +204,7 @@ def updateDoc():
                     return "True"
         return "False"
     else:
-        return "Autenticazione fallita"
+        return "-2" #->"Autenticazione fallita"
 
 
 """ Parametri da passare al metodo dismissDoc: token, CF """
@@ -221,7 +221,7 @@ def dismissDoc():
                     return "Dottore rimosso dai dipendenti"
         return "False"
     else:
-        return "Autenticazione fallita"
+        return "-2" #->"Autenticazione fallita"
 
 
 if __name__ == "__main__":
