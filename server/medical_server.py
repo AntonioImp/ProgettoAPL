@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 import secrets
 import string
+import datetime
 import Class.medicalcenter as med
 import Class.doc as doc
 import smtplib
@@ -86,6 +87,27 @@ def updatePassword():
     if token in session:
         medical = med.Medicalcenter(session[token])
         if medical.updatePassword(request.json["pass"]) == True:
+            return "0" #->"Password aggiornata"
+        else:
+            return "-1" #->"Aggiornamento fallito"
+    else:
+        return "-2" #->"Autenticazione fallita"
+
+
+""" Parametri da passare al metodo timeupdate: token, start_time, end_time, default_interval """
+@medical_server.route("/timeupdate", methods = ["POST"])
+def updateTiming():
+    token = request.json["token"]
+    if token in session:
+        medical = med.Medicalcenter(session[token])
+        try:
+            time_f = '%H:%M:%S'
+            datetime.datetime.strptime(request.json["start_time"], time_f)
+            datetime.datetime.strptime(request.json["end_time"], time_f)
+            datetime.datetime.strptime(request.json["default_interval"], time_f)
+        except:
+            return "-3" #->"Formato orario errato"
+        if medical.updateTiming(request.json["start_time"], request.json["end_time"], request.json["default_interval"]):
             return "0" #->"Password aggiornata"
         else:
             return "-1" #->"Aggiornamento fallito"

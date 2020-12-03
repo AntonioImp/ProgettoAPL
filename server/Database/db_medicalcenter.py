@@ -36,33 +36,40 @@ def updatePassword(medId, password):
     query = "UPDATE medical_center_credentials SET password='" + password + "' WHERE id=" + str(medId)
     return db.execute(query)
 
+def updateTiming(medId, start_time, end_time, default_interval):
+    query = "UPDATE medical_centers SET start_time='" + str(start_time) + "', end_time='" + str(end_time) + "', default_interval='" 
+    query += str(default_interval) + "' WHERE id=" + str(medId)
+    return db.execute(query)
+
 def deleteMedicalcenter(medId):
     query = "DELETE FROM medical_centers WHERE id = " + str(medId)
     return db.execute(query)
 
 if __name__ == "__main__":
-    print(getMedicalcenters())
-    print(getMedicalcenter(1))
-    """print(getPassword(1))
-    print(insertMedicalcenter({
-        "p_IVA": "C",
-        "phone": "C",
-        "mail": "C",
-        "CAP": "C",
-        "city": "C",
-        "street": "C",
+    #print(getMedicalcenters())
+    #print(getMedicalcenter(17))
+    #print(getPassword(1))
+    """print(insertMedicalcenter({
+        "p_IVA": "A",
+        "phone": "A",
+        "mail": "A",
+        "CAP": "A",
+        "city": "A",
+        "street": "A",
         "n_cv": 24
     }, "C"))
-    print(updateMedicalcenter({
-        "id": 7,
-        "p_IVA": "D",
-        "phone": "D",
-        "mail": "D",
-        "CAP": "B",
-        "city": "B",
-        "street": "B",
+    print(updateMedicalcenter(17, {
+        "p_IVA": "F",
+        "phone": "F",
+        "mail": "F",
+        "CAP": "F",
+        "city": "F",
+        "street": "F",
         "n_cv": 24
     }))
     print(updatePassword(7, "C"))
     print(deleteMedicalcenter(7))
-    print(getMedicalcenters())"""
+    print(updateTiming(17, '09:00:00', '11:00:00', '00:15:00'))
+    tup = getMedicalcenter(17)
+    for t in tup:
+        print(t["default_interval"])"""

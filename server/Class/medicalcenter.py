@@ -62,6 +62,18 @@ class Medicalcenter:
             return db_m.updatePassword(self.medicalcenter["id"], password)
         else:
             return False
+    
+    def updateTiming(self, start_time, end_time, default_interval):
+        if self.medicalcenter != ():
+            res = db_m.updateTiming(self.medicalcenter["id"], start_time, end_time, default_interval)
+            if res:
+                self.medicalcenter["start_time"] = start_time
+                self.medicalcenter["end_time"] = end_time
+                self.medicalcenter["default_interval"] = default_interval
+            return res
+        else:
+            return False
+
         
     def deleteMedicalcenter(self):
         if self.medicalcenter != ():
