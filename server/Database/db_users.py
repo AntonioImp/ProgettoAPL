@@ -43,4 +43,7 @@ def deleteUser(CF):
 
 
 """  --- BOOKING OP ---  """
-#def insertBooking
+def insertBooking(booking):
+    query = "INSERT INTO booking(practical_num, CF_U, ID_M, date, time) VALUES (" + booking["practical_num"] 
+    query += ", '" + booking["CF"] + "', " + booking["id"] + ", '" + booking["date"] + "', '" + booking["time"] + "')"
+    return db.execute(query)

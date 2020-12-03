@@ -30,6 +30,10 @@ class Medicalcenter:
             return self.medicalcenter
         else:
             return False
+
+    @staticmethod
+    def getMedicalcenters():
+        return db_m.getMedicalcenters()
     
     def getPassword(self):
         if self.medicalcenter != ():

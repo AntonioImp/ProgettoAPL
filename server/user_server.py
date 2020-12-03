@@ -2,6 +2,7 @@ from flask import Blueprint, request
 import secrets
 import string
 import Class.user as u
+import Class.medicalcenter as m
 import smtplib
 from smtplib import SMTPException
 
@@ -140,7 +141,34 @@ def delete():
             return "-3" #->"Password errata"
     else:
         return "-2" #->"Autenticazione fallita"
-    
+
+
+"""  --- GESTIONE PRENOTAZIONI ---  """
+""" Parametri da passare al metodo bookingMedicalcenter: token """
+@user_server.route("/getmedical", methods = ["POST"])
+def bookingMedicalcenter():
+    token = request.json["token"]
+    if token in session:
+        res = m.Medicalcenter.getMedicalcenters()
+        json = {}
+        for i, medical in enumerate(res):
+            json[i] = medical
+        return json
+    else:
+        return "-2" #->"Autenticazione fallita"
+
+
+""" Parametri da passare al metodo booking: token, id medical center, data prenotazione, ora prenotazione """
+@user_server.route("/booking", methods = ["POST"])
+def booking():
+
+    booking = {
+        "CF": session[token],
+        "id": request.json["id"],
+        "date": request.json["date"],
+        "time": request.json["time"]
+    }
+
 
 if __name__ == "__main__":
     user_server.run()

@@ -176,10 +176,9 @@ def getDocAssignment():
     token = request.json["token"]
     if token in session:
         res = doc.Doc.getDocAssignment(session[token])
-        json = "{"
-        for r in res:
-            json += str(r)
-        json += "}"
+        json = {}
+        for i, r in enumerate(res):
+            json[i] = r
         return json
     else:
         return "-2" #->"Autenticazione fallita"
