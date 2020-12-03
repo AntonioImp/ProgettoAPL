@@ -43,3 +43,27 @@ class DBHelper:
         
     def lastInsertId(self):
         return self.cur.lastrowid
+
+    def startTransaction(self):
+        try:
+            self.__connect__()
+            return True
+        except:
+            return False
+    
+    def transactionQuery(self, sql):
+        try:
+            self.cur.execute(sql)
+            return True
+        except:
+            self.con.rollback()
+            return False
+    
+    def stopTransaction(self):
+        try:
+            self.con.commit()
+            self.__disconnect__()
+            return True
+        except:
+            self.con.rollback()
+            return False

@@ -5,6 +5,8 @@ import Database.db_access as db_access
 
 db = db_access.DBHelper()
 
+
+"""  --- CRUD OP ---  """
 def getUsers():
     return db.fetch("select * from users")
 
@@ -38,3 +40,7 @@ def updatePassword(CF, password):
 def deleteUser(CF):
     query = "DELETE FROM users WHERE CF = '" + CF + "'"
     return db.execute(query)
+
+
+"""  --- BOOKING OP ---  """
+#def insertBooking

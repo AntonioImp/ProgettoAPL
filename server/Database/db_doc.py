@@ -15,32 +15,41 @@ def getDoc(CF):
 
 def getDocAssignment(data):
     if len(data) == 0:
-        query = "SELECT l.id, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l INNER JOIN docs AS d ON l.CF = d.CF"
+        query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l INNER JOIN docs AS d ON l.CF = d.CF"
     elif len(data) == 1:
         if type(data[0]) == str:
-            query = "SELECT l.id, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
+            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
             query += "INNER JOIN docs AS d ON l.CF = d.CF WHERE d.CF = '" + data[0] + "'"
         else:
-            query = "SELECT l.id, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
+            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
             query += "INNER JOIN docs AS d ON l.CF = d.CF WHERE l.id = " + str(data[0])
     else:
         if type(data[0]) == str:
-            query = "SELECT l.id, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
+            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
             query += "INNER JOIN docs AS d ON l.CF = d.CF WHERE d.CF = '" + data[0] + "' AND l.id = " + str(data[1])
         else:
-            query = "SELECT l.id, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
+            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
             query +="INNER JOIN docs AS d ON l.CF = d.CF WHERE d.CF = '" + data[1] + "' AND l.id = " + str(data[0])
     return db.fetch(query)
 
-def insertDoc(medId, doc):
-    res = ()
+def insertDoc(medId, doc, days):
+    res = {}
     if getDoc(doc["CF"]) == ():
         query = "INSERT INTO docs(CF, name, surname, phone, mail)"
         query += " VALUES ('" + doc["CF"] + "','" + doc["name"] + "','" + doc["surname"] + "','" + doc["phone"]
         query += "','" + doc["mail"] + "')"
-        res = (db.execute(query),)
-    query2 = "INSERT INTO docs_list(CF, id) VALUES ('" + doc["CF"] + "', '" + str(medId) + "')"
-    res += (db.execute(query2),)
+        res["docIns"] = db.execute(query)
+    
+    if db.startTransaction():
+        for day in days:
+            query = "INSERT INTO docs_list(CF, day, id) VALUES ('" + doc["CF"] + "', '" + day + "', " + str(medId) + ")"
+            insertLink = db.transactionQuery(query)
+            if not insertLink:
+                res["err"] = "Doc already assig in " + day
+                return res
+        if db.stopTransaction():
+            res["linkIns"] = "Doc assig"
+            
     return res
 
 def updateDoc(CF, doc):

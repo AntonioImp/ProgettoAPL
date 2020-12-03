@@ -46,7 +46,7 @@ def signup():
     else:
         return "False"
 
-    
+
 """ Parametri da passare al metodo logout: token """    
 @user_server.route("/logout", methods = ["GET"])
 def logout():

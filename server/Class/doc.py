@@ -31,9 +31,9 @@ class Doc:
         
     """ return tuple -> (bool insert docs, bool insert docs_list)
         or (bool insert docs_list,) if doc is already in docs table"""
-    def insertDoc(self, medId):
+    def insertDoc(self, medId, days):
         if self.doc != ():
-            return db_d.insertDoc(medId, self.doc)
+            return db_d.insertDoc(medId, self.doc, days)
         else:
             return False
         

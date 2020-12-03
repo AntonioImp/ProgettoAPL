@@ -157,13 +157,15 @@ def insertDoc():
             'mail': request.json["mail"]
         }
         Doc = doc.Doc(docData)
-        res = Doc.insertDoc(medId)
-        if len(res) == 1 and res[0] == True:
+        days = request.json["days"]
+        res = Doc.insertDoc(medId, days)
+        print(res)
+        if "err" in res:
+            return "-1" #->"Errore nell'inserimento. Giorni già impegnati"
+        elif "linkIns" in res and not "docIns" in res:
             return "1" #->"Dottore già in DB. Aggiunto solo ai dipendenti del medical center"
-        elif len(res) == 2 and res[0] == True and res[1] == True:
-            return "0" #->"Dottore inserito"
         else:
-            return "-1" #->"Errore nell'inserimento"
+            return "0" #->"Dottore inserito e assegnato"
     else:
         return "-2" #->"Autenticazione fallita"
 
