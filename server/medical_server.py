@@ -170,7 +170,12 @@ def insertDoc():
         return "-2" #->"Autenticazione fallita"
 
     
-""" Parametri da passare al metodo getDocAssignment: token"""
+""" Parametri da passare al metodo getDocAssignment: token.
+    Ritorno:
+        {
+            indice: docAssignment,
+            ...
+        }"""
 @medical_server.route("/docassignment", methods = ["POST"])
 def getDocAssignment():
     token = request.json["token"]

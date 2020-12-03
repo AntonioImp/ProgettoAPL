@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 import secrets
 import string
+import datetime
 import Class.user as u
 import Class.medicalcenter as m
 import smtplib
@@ -144,7 +145,12 @@ def delete():
 
 
 """  --- GESTIONE PRENOTAZIONI ---  """
-""" Parametri da passare al metodo bookingMedicalcenter: token """
+""" Parametri da passare al metodo bookingMedicalcenter: token.
+    Ritorno:
+        {
+            indice: medicalcenter,
+            ...
+        }"""
 @user_server.route("/getmedical", methods = ["POST"])
 def bookingMedicalcenter():
     token = request.json["token"]
@@ -158,16 +164,29 @@ def bookingMedicalcenter():
         return "-2" #->"Autenticazione fallita"
 
 
-""" Parametri da passare al metodo booking: token, id medical center, data prenotazione, ora prenotazione """
-@user_server.route("/booking", methods = ["POST"])
-def booking():
-
-    booking = {
-        "CF": session[token],
-        "id": request.json["id"],
-        "date": request.json["date"],
-        "time": request.json["time"]
-    }
+""" Parametri da passare al metodo setBooking: token, id medical center, data prenotazione, ora prenotazione
+    Formato data tempo: YYYY-MM-DD HH:MM:SS """
+@user_server.route("/setbooking", methods = ["POST"])
+def setBooking():
+    token = request.json["token"]
+    if token in session:
+        try:
+            dt = request.json["date"] + ' ' + request.json["time"]
+            date_f = '%Y-%m-%d %H:%M:%S'
+            dt = datetime.datetime.strptime(dt, date_f)
+        except:
+            return "-1" #->"Datetime format error"
+        booking = {
+            "CF": session[token],
+            "id": request.json["id"],
+            "date": dt.date(),
+            "time": dt.time()
+        }
+        user = u.User(session[token])
+        if user.insertBooking(booking):
+            return "0" #->"Prenotazione inserita"
+    else:
+        return "-2" #->"Autenticazione fallita"
 
 
 if __name__ == "__main__":

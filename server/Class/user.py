@@ -71,4 +71,10 @@ class User:
             return res
         else:
             return False
+
+    def insertBooking(self, booking):
+        if self.user != ():
+            return db_u.insertBooking(booking)
+        else:
+            return False
     
