@@ -247,8 +247,8 @@ def dismissDoc():
             if r["CF"] == CF:
                 Doc = doc.Doc(CF)
                 if Doc.dismissDoc(session[token]):
-                    return "Dottore rimosso dai dipendenti"
-        return "False"
+                    return "0" #->"Dottore rimosso dai dipendenti"
+        return "-1" #->"Errore eliminazione"
     else:
         return "-2" #->"Autenticazione fallita"
 
