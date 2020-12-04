@@ -94,7 +94,8 @@ def updatePassword():
         return "-2" #->"Autenticazione fallita"
 
 
-""" Parametri da passare al metodo timeupdate: token, start_time, end_time, default_interval """
+""" Parametri da passare al metodo timeupdate: token, start_time, end_time, default_interval 
+    Formato tempo: HH:MM:SS """
 @medical_server.route("/timeupdate", methods = ["POST"])
 def updateTiming():
     token = request.json["token"]
