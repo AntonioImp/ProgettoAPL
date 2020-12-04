@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 03, 2020 alle 14:10
+-- Creato il: Dic 04, 2020 alle 23:04
 -- Versione del server: 10.4.14-MariaDB
 -- Versione PHP: 7.4.11
 
@@ -121,6 +121,27 @@ INSERT INTO `docs_list` (`CF`, `day`, `id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `doc_timing`
+--
+
+CREATE TABLE `doc_timing` (
+  `CF` varchar(16) NOT NULL,
+  `date` date NOT NULL,
+  `swab_n` int(11) NOT NULL,
+  `avarage_time` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `doc_timing`
+--
+
+INSERT INTO `doc_timing` (`CF`, `date`, `swab_n`, `avarage_time`) VALUES
+('C', '2020-12-04', 20, '00:05:00'),
+('G', '2020-12-04', 30, '00:03:00');
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `executions`
 --
 
@@ -145,18 +166,22 @@ CREATE TABLE `medical_centers` (
   `CAP` varchar(5) NOT NULL,
   `city` varchar(40) NOT NULL,
   `street` varchar(300) NOT NULL,
-  `n_cv` int(11) NOT NULL
+  `n_cv` int(11) NOT NULL,
+  `start_time` time NOT NULL DEFAULT '08:00:00',
+  `end_time` time NOT NULL DEFAULT '12:00:00',
+  `default_interval` time NOT NULL DEFAULT '00:10:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `medical_centers`
 --
 
-INSERT INTO `medical_centers` (`id`, `p_IVA`, `phone`, `mail`, `CAP`, `city`, `street`, `n_cv`) VALUES
-(10, 'B', 'B', 'antonioimpala251196@gmail.com', 'B', 'B', 'B', 24),
-(12, 'C', 'C', 'C', 'C', 'C', 'C', 24),
-(13, 'D', 'D', 'D', 'D', 'D', 'D', 24),
-(15, 'E', 'E', 'E', 'E', 'E', 'E', 24);
+INSERT INTO `medical_centers` (`id`, `p_IVA`, `phone`, `mail`, `CAP`, `city`, `street`, `n_cv`, `start_time`, `end_time`, `default_interval`) VALUES
+(10, 'B', 'B', 'antonioimpala251196@gmail.com', 'B', 'B', 'B', 24, '08:00:00', '12:00:00', '00:10:00'),
+(12, 'C', 'C', 'C', 'C', 'C', 'C', 24, '08:00:00', '12:00:00', '00:10:00'),
+(13, 'D', 'D', 'D', 'D', 'D', 'D', 24, '08:00:00', '12:00:00', '00:10:00'),
+(15, 'E', 'E', 'E', 'E', 'E', 'E', 24, '08:30:00', '12:00:00', '00:10:00'),
+(17, 'F', 'F', 'F', 'F', 'F', 'F', 24, '09:00:00', '11:00:00', '00:15:00');
 
 -- --------------------------------------------------------
 
@@ -177,20 +202,8 @@ INSERT INTO `medical_center_credentials` (`id`, `password`) VALUES
 (10, 'B'),
 (12, 'C'),
 (13, 'D'),
-(15, 'E');
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `timing`
---
-
-CREATE TABLE `timing` (
-  `CF` varchar(16) NOT NULL,
-  `date` date NOT NULL,
-  `swab_n` int(11) NOT NULL,
-  `avarage_time` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(15, 'E'),
+(17, 'C');
 
 -- --------------------------------------------------------
 
@@ -257,6 +270,12 @@ ALTER TABLE `docs_list`
   ADD KEY `docs_list_ibfk_2` (`id`);
 
 --
+-- Indici per le tabelle `doc_timing`
+--
+ALTER TABLE `doc_timing`
+  ADD PRIMARY KEY (`CF`,`date`);
+
+--
 -- Indici per le tabelle `executions`
 --
 ALTER TABLE `executions`
@@ -277,12 +296,6 @@ ALTER TABLE `medical_centers`
 --
 ALTER TABLE `medical_center_credentials`
   ADD PRIMARY KEY (`id`);
-
---
--- Indici per le tabelle `timing`
---
-ALTER TABLE `timing`
-  ADD PRIMARY KEY (`CF`);
 
 --
 -- Indici per le tabelle `users`
@@ -306,7 +319,7 @@ ALTER TABLE `booking`
 -- AUTO_INCREMENT per la tabella `medical_centers`
 --
 ALTER TABLE `medical_centers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Limiti per le tabelle scaricate
@@ -333,6 +346,12 @@ ALTER TABLE `docs_list`
   ADD CONSTRAINT `docs_list_ibfk_2` FOREIGN KEY (`id`) REFERENCES `medical_centers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Limiti per la tabella `doc_timing`
+--
+ALTER TABLE `doc_timing`
+  ADD CONSTRAINT `doc_timing_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `docs` (`CF`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Limiti per la tabella `executions`
 --
 ALTER TABLE `executions`
@@ -344,12 +363,6 @@ ALTER TABLE `executions`
 --
 ALTER TABLE `medical_center_credentials`
   ADD CONSTRAINT `medical_center_credentials_ibfk_1` FOREIGN KEY (`id`) REFERENCES `medical_centers` (`id`) ON DELETE CASCADE;
-
---
--- Limiti per la tabella `timing`
---
-ALTER TABLE `timing`
-  ADD CONSTRAINT `timing_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `docs` (`CF`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

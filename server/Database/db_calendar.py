@@ -20,4 +20,4 @@ def startCalendar(medId):
     return med[0], res
 
 if __name__ == "__main__":
-    print(startCalendar(10))
+    print(startCalendar(15))
