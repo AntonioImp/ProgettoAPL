@@ -46,7 +46,7 @@ def signup():
     if res[0] and res[1]:
         return str(res[2])
     else:
-        return "False"
+        return "-1" #->"Errore registrazione"
 
 
 """ Parametri da passare al metodo logout: token """    
@@ -230,8 +230,8 @@ def updateDoc():
                 }
                 Doc = doc.Doc(CF)
                 if Doc.updateDoc(docData):
-                    return "True"
-        return "False"
+                    return "0" #->"Dottore aggiornato"
+        return "-1" #->"Errore aggiornamento"
     else:
         return "-2" #->"Autenticazione fallita"
 
