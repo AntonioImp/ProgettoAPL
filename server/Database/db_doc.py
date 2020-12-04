@@ -64,6 +64,7 @@ def deleteDoc(CF):
 def dismissDoc(CF, medId):
     query = "DELETE FROM docs_list WHERE CF = '" + CF + "' AND id = " + str(medId)
     return db.execute(query)
+
     
 if __name__ == "__main__":
     print(getDocs())

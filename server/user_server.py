@@ -29,6 +29,21 @@ def login():
         return "False"
 
 
+""" Parametri da passare al metodo getuser: token """
+@user_server.route("/getuser", methods = ["POST"])
+def getUser():
+    token = request.json["token"]
+    if token in session:
+        user = u.User(session[token])
+        res = user.getUser()
+        if type(res) != bool:
+            return res
+        else:
+            return "-1" #->"Errore identificazione utente"
+    else:
+        return "-2" #->""Autenticazione fallita""
+
+
 """ Parametri da passare al metodo signup: dati utente, password """
 @user_server.route("/signup", methods = ["POST"])
 def signup():
@@ -44,16 +59,16 @@ def signup():
               'n_cv': request.json["n_cv"]}
     user = u.User(userData, request.json["pass"])
     if user.insertUser() == (True, True):
-        return "True"
+        return "0" #->"Registrazione effettuata"
     else:
-        return "False"
+        return "-1" #->"Errore registrazione"
 
 
 """ Parametri da passare al metodo logout: token """    
 @user_server.route("/logout", methods = ["GET"])
 def logout():
     session.pop(request.args["token"])
-    return "True"
+    return "0" #->"Logout effettuato"
 
 
 """ Parametri da passare al metodo userupdate: token, dati utente aggiornati """    
