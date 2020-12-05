@@ -17,7 +17,7 @@ def startCalendar(medId):
                 res += d
     query = "SELECT id, start_time, end_time, default_interval FROM medical_centers WHERE id = " + str(medId)
     med = db.fetch(query)
-    return med[0], res
+    return med[0], res, docs
 
 if __name__ == "__main__":
     print(startCalendar(15))
