@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 04, 2020 alle 23:04
+-- Creato il: Dic 06, 2020 alle 19:42
 -- Versione del server: 10.4.14-MariaDB
 -- Versione PHP: 7.4.11
 
@@ -31,9 +31,19 @@ CREATE TABLE `booking` (
   `practical_num` int(11) NOT NULL,
   `CF_U` varchar(16) NOT NULL,
   `ID_M` int(11) NOT NULL,
+  `CF_M` varchar(16) NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `booking`
+--
+
+INSERT INTO `booking` (`practical_num`, `CF_U`, `ID_M`, `CF_M`, `date`, `time`) VALUES
+(1, 'MPLNTN96S25F158E', 15, 'C', '2020-12-05', '08:30:00'),
+(3, 'MPLNTN96S25F158E', 15, 'C', '2020-12-07', '08:37:00'),
+(4, 'MPLNTN96S25F158E', 10, 'F', '2020-12-07', '08:50:00');
 
 -- --------------------------------------------------------
 
@@ -137,6 +147,7 @@ CREATE TABLE `doc_timing` (
 
 INSERT INTO `doc_timing` (`CF`, `date`, `swab_n`, `avarage_time`) VALUES
 ('C', '2020-12-04', 20, '00:05:00'),
+('C', '2020-12-05', 30, '00:07:00'),
 ('G', '2020-12-04', 30, '00:03:00');
 
 -- --------------------------------------------------------
@@ -147,7 +158,6 @@ INSERT INTO `doc_timing` (`CF`, `date`, `swab_n`, `avarage_time`) VALUES
 
 CREATE TABLE `executions` (
   `id` int(11) NOT NULL,
-  `CF_M` varchar(16) NOT NULL,
   `time_taken` time NOT NULL,
   `result` enum('positivo','negativo') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -245,7 +255,8 @@ INSERT INTO `users` (`CF`, `name`, `surname`, `phone`, `mail`, `age`, `CAP`, `ci
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`practical_num`),
   ADD KEY `CF_U` (`CF_U`),
-  ADD KEY `ID_M` (`ID_M`);
+  ADD KEY `ID_M` (`ID_M`),
+  ADD KEY `CF_M` (`CF_M`);
 
 --
 -- Indici per le tabelle `credentials`
@@ -279,8 +290,7 @@ ALTER TABLE `doc_timing`
 -- Indici per le tabelle `executions`
 --
 ALTER TABLE `executions`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `CF_M` (`CF_M`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `medical_centers`
@@ -313,7 +323,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT per la tabella `medical_centers`
@@ -330,7 +340,8 @@ ALTER TABLE `medical_centers`
 --
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`CF_U`) REFERENCES `users` (`CF`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`ID_M`) REFERENCES `medical_centers` (`id`);
+  ADD CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`ID_M`) REFERENCES `medical_centers` (`id`),
+  ADD CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`CF_M`) REFERENCES `docs` (`CF`);
 
 --
 -- Limiti per la tabella `credentials`
@@ -355,8 +366,7 @@ ALTER TABLE `doc_timing`
 -- Limiti per la tabella `executions`
 --
 ALTER TABLE `executions`
-  ADD CONSTRAINT `executions_ibfk_1` FOREIGN KEY (`id`) REFERENCES `booking` (`practical_num`),
-  ADD CONSTRAINT `executions_ibfk_2` FOREIGN KEY (`CF_M`) REFERENCES `docs` (`CF`);
+  ADD CONSTRAINT `executions_ibfk_1` FOREIGN KEY (`id`) REFERENCES `booking` (`practical_num`);
 
 --
 -- Limiti per la tabella `medical_center_credentials`
