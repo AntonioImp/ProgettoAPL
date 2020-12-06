@@ -5,8 +5,8 @@ import Database.db_access as db_access
 
 db = db_access.DBHelper()
 
-def startCalendar(medId):
-    query = "SELECT CF FROM docs_list WHERE id = " + str(medId)
+def startCalendar(medId, day):
+    query = "SELECT CF FROM docs_list WHERE id = " + str(medId) + " AND day = '" + day + "'"
     docs = set([doc["CF"] for doc in db.fetch(query)])
     res = []
     for doc in docs:

@@ -194,6 +194,8 @@ def getCalendar():
         with shelve.open('archive') as archive:
             manager = archive['manager']
         calendarDict = manager.getCalendarDict()
+        if calendarDict == {}:
+            return "-1" #->"Non sono presenti posti disponibili"
         res = calendarDict[request.json["id"]].getCalendar()
         json = {}
         for doc, turn  in res.items():
@@ -211,6 +213,9 @@ def setBooking():
     if token in session:
         with shelve.open('archive') as archive:
             manager = archive['manager']
+        calendarDict = manager.getCalendarDict()
+        if calendarDict == {}:
+            return "-5" #->"Non sono presenti posti disponibili"
         try:
             date_f = '%H:%M:%S'
             dt = datetime.datetime.strptime(str(request.json["time"]), date_f)

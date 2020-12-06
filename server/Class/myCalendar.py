@@ -1,5 +1,6 @@
 import sys
 import datetime
+import calendar
 
 sys.path.append('../')
 import Database.db_calendar as db_c
@@ -9,8 +10,21 @@ class MyCalendar:
     """ L'elemento della classe conterrà l'istanza del medical center a cui si riferisce e un dizionario (calendar)
     composto da giorno di riferimento come key e lista di orari per quel giorno come valori. """
 
-    def __init__(self, medId):
-        results = db_c.startCalendar(medId)
+    giorni_settimana = {
+        0: "lunedì",
+        1: "martedí",
+        2: "mercoledí",
+        3: "giovedì",
+        4: "venerdì",
+        5: "sabato",
+        6: "domenica"
+    }
+    
+    def __init__(self, medId, day):
+        giorno = self.giorni_settimana[calendar.weekday(day.year, day.month, day.day)]
+        if(giorno == "domenica"):
+            raise Exception("Domenica non vengono effettuati tamponi!")
+        results = db_c.startCalendar(medId, giorno)
         self.medicalcenter = results[0]
         doc_timing = sorted(results[1], key=lambda l: l["date"], reverse=True)
         docs = results[2]
@@ -34,7 +48,6 @@ class MyCalendar:
                 turn = datetime.datetime.strptime(str(time), '%H:%M:%S')
                 self.calendar[doc].append(turn.time().replace(second=0))
                 time += value
-
         """for tmp, value in self.calendar.items():
             print(tmp, end=': ')
             for v in value:
@@ -48,12 +61,12 @@ class MyCalendar:
         """
         booked = db_c.getBooked(self.medicalcenter["id"])
         if booked != False and booked != ():
-            tmp = booked
+            tmp = booked[:]
             for b in tmp:
-                if b["date"] < day:
+                if b["date"] < day or day < b["date"]:
                     booked.remove(b)
             del tmp
-            
+
             for b in booked:
                 turn = datetime.datetime.strptime(str(b["time"]), '%H:%M:%S')
                 turn.time().replace(second=0)

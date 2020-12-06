@@ -31,13 +31,16 @@ class CalendarManager:
             self.initCalendarDict()
 
     def initCalendarDict(self):
-        medical = m.Medicalcenter.getMedicalcenters()
-        if medical != False:
-            for med in medical:
-                calendar = c.MyCalendar(med["id"])
-                calendar.updateCalendar(self.currentDay)
-                self.calendarDict[med["id"]] = calendar
-            print("CalendarDict creato")
+        try:
+            medical = m.Medicalcenter.getMedicalcenters()
+            if medical != False:
+                for med in medical:
+                    calendar = c.MyCalendar(med["id"], self.currentDay)
+                    calendar.updateCalendar(self.currentDay)
+                    self.calendarDict[med["id"]] = calendar
+                print("CalendarDict creato")
+        except Exception as e:
+            print(e)
 
     def getCalendarDict(self):
         return self.calendarDict
@@ -57,11 +60,11 @@ class CalendarManager:
 def setDay():
     try:
         date_f = '%Y-%m-%d'
-        datetime.datetime.strptime(request.json["day"], date_f)
+        dt = datetime.datetime.strptime(request.json["day"], date_f)
     except:
         return "-1" #->"Datetime format error"
     manager = CalendarManager.getInstance()
-    manager.setDate(request.json["day"])
+    manager.setDate(dt.date())
     manager.initCalendarDict()
     with shelve.open('archive') as archive:
         archive['manager'] = manager
