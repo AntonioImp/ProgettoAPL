@@ -4,8 +4,7 @@ import string
 import datetime
 import Class.user as u
 import Class.medicalcenter as m
-import smtplib
-from smtplib import SMTPException
+import shelve
 
 user_server = Blueprint("user_server", __name__, static_folder = "static")
 session = {}
@@ -112,6 +111,9 @@ def updatePassword():
 """ Parametri da passare al metodo resetPassword: CF """
 @user_server.route("/passreset", methods = ["POST"])
 def resetPassword():
+    import smtplib
+    from smtplib import SMTPException
+
     user = u.User(request.json["CF"])
     userData = user.getUser()
     if userData != False:
@@ -179,27 +181,60 @@ def bookingMedicalcenter():
         return "-2" #->"Autenticazione fallita"
 
 
-""" Parametri da passare al metodo setBooking: token, id medical center, data prenotazione, ora prenotazione
+""" Parametri da passare al metodo getcalendar: token, id medical center(id)
+    Ritorna un dict:
+    {
+        CF medico: lista orari,
+        ...
+    } """
+@user_server.route("/getcalendar", methods = ["POST"])
+def getCalendar():
+    token = request.json["token"]
+    if token in session:
+        with shelve.open('archive') as archive:
+            manager = archive['manager']
+        calendarDict = manager.getCalendarDict()
+        res = calendarDict[request.json["id"]].getCalendar()
+        json = {}
+        for doc, turn  in res.items():
+            json[doc] = [str(t) for t in turn]
+        return json
+    else:
+        return "-2" #->"Autenticazione fallita"
+
+
+""" Parametri da passare al metodo setBooking: token, id medical center(id), ora prenotazione(time), CF dottore(CF_M)
     Formato data tempo: YYYY-MM-DD HH:MM:SS """
 @user_server.route("/setbooking", methods = ["POST"])
 def setBooking():
     token = request.json["token"]
     if token in session:
+        with shelve.open('archive') as archive:
+            manager = archive['manager']
         try:
-            dt = request.json["date"] + ' ' + request.json["time"]
-            date_f = '%Y-%m-%d %H:%M:%S'
-            dt = datetime.datetime.strptime(dt, date_f)
+            date_f = '%H:%M:%S'
+            dt = datetime.datetime.strptime(str(request.json["time"]), date_f)
+            dt.time().replace(second=0)
         except:
             return "-1" #->"Datetime format error"
         booking = {
             "CF": session[token],
             "id": request.json["id"],
-            "date": dt.date(),
+            "CF_M": request.json["CF_M"],
+            "date": manager.getDate(),
             "time": dt.time()
         }
+        if not manager.removeBooked(request.json["id"], dt, request.json["CF_M"]):
+            return "-3" #->"Errore aggiornamento calendario"
         user = u.User(session[token])
-        if user.insertBooking(booking):
-            return "0" #->"Prenotazione inserita"
+        res = user.insertBooking(booking)
+        if res["ins"]:
+            with shelve.open('archive') as archive:
+                archive['manager'] = manager
+            print(res["lastId"])
+            return str(res["lastId"]) #->"Prenotazione inserita, torna l'id"
+        else:
+            return "-4" #->"Errore inserimento prenotazione"
     else:
         return "-2" #->"Autenticazione fallita"
 

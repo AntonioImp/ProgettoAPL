@@ -41,6 +41,12 @@ class Medicalcenter:
         else:
             return False
     
+    def getBooked(self):
+        if self.medicalcenter != ():
+            return db_m.getBooked(self.medicalcenter["id"])
+        else:
+            return False
+
     """ return tuple -> (bool, bool, medical center id)"""
     def insertMedicalcenter(self):
         if self.medicalcenter != ():

@@ -19,5 +19,9 @@ def startCalendar(medId):
     med = db.fetch(query)
     return med[0], res, docs
 
+def getBooked(medId):
+    query = "SELECT * FROM booking WHERE ID_M = " + str(medId)
+    return db.fetch(query)
+
 if __name__ == "__main__":
     print(startCalendar(15))

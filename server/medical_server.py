@@ -4,8 +4,6 @@ import string
 import datetime
 import Class.medicalcenter as med
 import Class.doc as doc
-import smtplib
-from smtplib import SMTPException
 
 medical_server = Blueprint("medical_server", __name__, static_folder = "static")
 session = {}
@@ -119,6 +117,9 @@ def updateTiming():
 """ Parametri da passare al metodo resetPassword: CF """
 @medical_server.route("/passreset", methods = ["POST"])
 def resetPassword():
+    import smtplib
+    from smtplib import SMTPException
+
     medical = med.Medicalcenter(request.json["id"])
     medicalData = medical.getMedicalcenter()
     if medicalData != False:
@@ -249,6 +250,25 @@ def dismissDoc():
                 if Doc.dismissDoc(session[token]):
                     return "0" #->"Dottore rimosso dai dipendenti"
         return "-1" #->"Errore eliminazione"
+    else:
+        return "-2" #->"Autenticazione fallita"
+
+
+"""  --- Gestione prenotazioni ---  """
+""" Parametri da passare al metodo getbooked: token """
+@medical_server.route("/getbooked", methods = ["POST"])
+def getBooked():
+    token = request.json["token"]
+    if token in session:
+        medical = med.Medicalcenter(session[token])
+        res = medical.getBooked()
+        print(res)
+        json = {}
+        for i, r in enumerate(res):
+            r["date"] = str(r["date"])
+            r["time"] = str(r["time"])
+            json[i] = r
+        return json
     else:
         return "-2" #->"Autenticazione fallita"
 

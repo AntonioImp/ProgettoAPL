@@ -16,6 +16,10 @@ def getPassword(medId):
     query = "SELECT password FROM medical_center_credentials WHERE id = " + str(medId)
     return db.fetch(query)
 
+def getBooked(medId):
+    query = "SELECT * FROM booking WHERE ID_M = " + str(medId)
+    return db.fetch(query)
+
 def insertMedicalcenter(mc, password):
     query = "INSERT INTO medical_centers(p_IVA, phone, mail, CAP, city, street, n_cv)"
     query += " VALUES ( '" + mc["p_IVA"] + "', '" + mc["phone"] + "', '" + mc["mail"]

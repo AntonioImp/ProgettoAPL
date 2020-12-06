@@ -26,7 +26,8 @@ class DBHelper:
             result = self.cur.fetchall()
             self.__disconnect__()
             return result
-        except:
+        except Exception as arg:
+            print(arg)
             self.con.rollback()
             return False
 
@@ -37,7 +38,8 @@ class DBHelper:
             self.con.commit()
             self.__disconnect__()
             return True
-        except:
+        except Exception as arg:
+            print(arg)
             self.con.rollback()
             return False
         
@@ -48,14 +50,16 @@ class DBHelper:
         try:
             self.__connect__()
             return True
-        except:
+        except Exception as arg:
+            print(arg)
             return False
     
     def transactionQuery(self, sql):
         try:
             self.cur.execute(sql)
             return True
-        except:
+        except Exception as arg:
+            print(arg)
             self.con.rollback()
             return False
     
@@ -64,6 +68,7 @@ class DBHelper:
             self.con.commit()
             self.__disconnect__()
             return True
-        except:
+        except Exception as arg:
+            print(arg)
             self.con.rollback()
             return False
