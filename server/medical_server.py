@@ -262,7 +262,6 @@ def getBooked():
     if token in session:
         medical = med.Medicalcenter(session[token])
         res = medical.getBooked()
-        print(res)
         json = {}
         for i, r in enumerate(res):
             r["date"] = str(r["date"])

@@ -50,3 +50,7 @@ def insertBooking(booking):
     res["ins"] = db.execute(query)
     res["lastId"] = db.lastInsertId()
     return res
+
+def getBooked(CF):
+    query = "SELECT * FROM booking WHERE CF_U = '" + CF + "'"
+    return db.fetch(query)

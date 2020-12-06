@@ -77,4 +77,10 @@ class User:
             return db_u.insertBooking(booking)
         else:
             return False
+
+    def getBooked(self):
+        if self.user != ():
+            return db_u.getBooked(self.user["CF"])
+        else:
+            return False
     

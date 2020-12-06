@@ -244,5 +244,21 @@ def setBooking():
         return "-2" #->"Autenticazione fallita"
 
 
+""" Parametri da passare al metodo getbooked: token """
+@user_server.route("/getbooked", methods = ["POST"])
+def getBooked():
+    token = request.json["token"]
+    if token in session:
+        user = u.User(session[token])
+        res = user.getBooked()
+        json = {}
+        for i, r in enumerate(res):
+            r["date"] = str(r["date"])
+            r["time"] = str(r["time"])
+            json[i] = r
+        return json
+    else:
+        return "-2" #->"Autenticazione fallita"
+
 if __name__ == "__main__":
     user_server.run()
