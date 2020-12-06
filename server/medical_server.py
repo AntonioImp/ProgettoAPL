@@ -17,7 +17,7 @@ def token_generator(size):
 """ Parametri da passare al metodo login: id, password"""
 @medical_server.route("/login", methods = ["POST"])
 def login():
-    medId = request.json["id"]
+    medId = int(request.json["id"])
     medical = med.Medicalcenter(medId)
     if medical.getMedicalcenter() != False and request.json["pass"] == medical.getPassword():
         token = token_generator(10)
@@ -120,7 +120,7 @@ def resetPassword():
     import smtplib
     from smtplib import SMTPException
 
-    medical = med.Medicalcenter(request.json["id"])
+    medical = med.Medicalcenter(int(request.json["id"]))
     medicalData = medical.getMedicalcenter()
     if medicalData != False:
         newPass = token_generator(20)
