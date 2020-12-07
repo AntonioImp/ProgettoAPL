@@ -234,7 +234,7 @@ def setBooking():
             if b["date"] == manager.getDate():
                 return "-6" #->"L'utente ha già una prenotazione per questo giorno"
         del booked
-        
+
         booking = {
             "CF": session[token],
             "id": int(request.json["id"]),
@@ -270,6 +270,28 @@ def getBooked():
         return json
     else:
         return "-2" #->"Autenticazione fallita"
+
+
+""" Parametri da passare al metodo deleteBooked: token, id prenotazione (id) """
+@user_server.route("/deletebooked", methods = ["POST"])
+def deleteBooked():
+    token = request.json["token"]
+    if token in session:
+        user = u.User(session[token])
+        res = user.getBooked()
+        res2 = None
+        for r in res:
+            if r["practical_num"] == request.json["id"]:
+                res2 = user.deleteBooked(request.json["id"])
+        if res2 == None:
+            return "-1" #->"Prenotazione non trovata"
+        elif res2:
+            return "0" #->"Prenotazione eliminata"
+        else:
+            return "-3" #->"Errore nell'eliminazione, il tampone potrebbe già essere stato eseguito"
+    else:
+        return "-2" #->"Autenticazione fallita"
+
 
 if __name__ == "__main__":
     user_server.run()

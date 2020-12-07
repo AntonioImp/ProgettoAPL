@@ -84,3 +84,9 @@ class User:
         else:
             return False
     
+    def deleteBooked(self, practical_num):
+        if self.user != ():
+            return db_u.deleteBooked(practical_num)
+        else:
+            return False
+    

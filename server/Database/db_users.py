@@ -54,3 +54,7 @@ def insertBooking(booking):
 def getBooked(CF):
     query = "SELECT * FROM booking WHERE CF_U = '" + CF + "'"
     return db.fetch(query)
+
+def deleteBooked(practical_num):
+    query = "DELETE FROM booking WHERE practical_num = " + str(practical_num)
+    return db.execute(query)
