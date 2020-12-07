@@ -194,13 +194,16 @@ def getCalendar():
         with shelve.open('archive') as archive:
             manager = archive['manager']
         calendarDict = manager.getCalendarDict()
-        if calendarDict == {}:
+        if not calendarDict:
             return "-1" #->"Non sono presenti posti disponibili"
         res = calendarDict[int(request.json["id"])].getCalendar()
-        json = {}
-        for doc, turn  in res.items():
-            json[doc] = [str(t) for t in turn]
-        return json
+        if res != False:
+            json = {}
+            for doc, turn  in res.items():
+                json[doc] = [str(t) for t in turn]
+            return json
+        else:
+            return "-3" #->"Nessun dottore disponibile"
     else:
         return "-2" #->"Autenticazione fallita"
 

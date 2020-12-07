@@ -41,6 +41,7 @@ class CalendarManager:
                 print("CalendarDict creato")
         except Exception as e:
             print(e)
+            self.calendarDict = False
 
     def getCalendarDict(self):
         return self.calendarDict
@@ -79,6 +80,4 @@ if __name__ == "__main__":
     manager = CalendarManager.getInstance()
     with shelve.open('archive') as archive:
         archive['manager'] = manager
-    """with open('CalendarManager.pickle', 'w') as f:
-        pickle.dump(manager, f)"""
     app.run()
