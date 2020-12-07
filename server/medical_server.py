@@ -205,8 +205,21 @@ def getDocAssignment():
     token = request.json["token"]
     if token in session:
         res = doc.Doc.getDocAssignment(session[token])
+        copyRes = [r.copy() for r in res]
+        for cr in copyRes:
+            del cr["day"]
+        uniqueCopyRes = []
+        for x in copyRes:
+            if x not in uniqueCopyRes:
+                uniqueCopyRes.append(x)
+        del copyRes
+        for cr in uniqueCopyRes:
+            cr["day"] = []
+            for d in res:
+                if cr["CF"] == d["CF"]:
+                    cr["day"].append(d["day"])
         json = {}
-        for i, r in enumerate(res):
+        for i, r in enumerate(uniqueCopyRes):
             json[i] = r
         return json
     else:
