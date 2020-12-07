@@ -195,7 +195,7 @@ def getCalendar():
             manager = archive['manager']
         calendarDict = manager.getCalendarDict()
         if not calendarDict:
-            return "-1" #->"Non sono presenti posti disponibili"
+            return "-1" #->"Non si effettuano tamponi la domenica"
         res = calendarDict[int(request.json["id"])].getCalendar()
         if res != False:
             json = {}
@@ -217,14 +217,24 @@ def setBooking():
         with shelve.open('archive') as archive:
             manager = archive['manager']
         calendarDict = manager.getCalendarDict()
-        if calendarDict == {}:
-            return "-5" #->"Non sono presenti posti disponibili"
+        
+        if not calendarDict:
+            return "-5" #->"Non si effettuano tamponi la domenica"
+        
         try:
             date_f = '%H:%M:%S'
             dt = datetime.datetime.strptime(str(request.json["time"]), date_f)
             dt.time().replace(second=0)
         except:
             return "-1" #->"Datetime format error"
+        
+        user = u.User(session[token])
+        booked = user.getBooked()
+        for b in booked:
+            if b["date"] == manager.getDate():
+                return "-6" #->"L'utente ha già una prenotazione per questo giorno"
+        del booked
+        
         booking = {
             "CF": session[token],
             "id": int(request.json["id"]),
@@ -234,7 +244,6 @@ def setBooking():
         }
         if not manager.removeBooked(int(request.json["id"]), dt, request.json["CF_M"]):
             return "-3" #->"Errore aggiornamento calendario"
-        user = u.User(session[token])
         res = user.insertBooking(booking)
         if res["ins"]:
             with shelve.open('archive') as archive:
