@@ -7,7 +7,11 @@ import Class.medicalcenter as m
 import shelve
 
 user_server = Blueprint("user_server", __name__, static_folder = "static")
-session = {}
+with shelve.open('archive') as archive:
+    if "session" in archive:
+        session = archive['session']
+    else:
+        session = {}
 
 """ Generatore di token alfanumerici """
 def token_generator(size):
@@ -23,7 +27,15 @@ def login():
     if user.getUser() != False and user.getPassword() == request.json["pass"]:
         token = token_generator(10)
         session[token] = CF
-        return token
+
+        with shelve.open('archive') as archive:
+            archive['session'] = session
+
+        res = {}
+        res["token"] = token
+        for key, value in user.getUser().items():
+            res[key] = value
+        return res
     else:
         return "False"
 
@@ -67,6 +79,10 @@ def signup():
 @user_server.route("/logout", methods = ["GET"])
 def logout():
     session.pop(request.args["token"])
+
+    with shelve.open('archive') as archive:
+        archive['session'] = session
+
     return "0" #->"Logout effettuato"
 
 

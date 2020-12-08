@@ -4,9 +4,14 @@ import string
 import datetime
 import Class.medicalcenter as med
 import Class.doc as doc
+import shelve
 
 medical_server = Blueprint("medical_server", __name__, static_folder = "static")
-session = {}
+with shelve.open('archive') as archive:
+    if "session" in archive:
+        session = archive['session']
+    else:
+        session = {}
 
 """ Generatore di token alfanumerici """
 def token_generator(size):
@@ -22,6 +27,10 @@ def login():
     if medical.getMedicalcenter() != False and request.json["pass"] == medical.getPassword():
         token = token_generator(10)
         session[token] = medId
+
+        with shelve.open('archive') as archive:
+            archive['session'] = session
+
         return token
     else:
         return "False"
@@ -51,6 +60,10 @@ def signup():
 @medical_server.route("/logout", methods = ["GET"])
 def logout():
     session.pop(request.args["token"])
+
+    with shelve.open('archive') as archive:
+        archive['session'] = session
+    
     return "0" #->"Logout effettuato"
 
 
