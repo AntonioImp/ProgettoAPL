@@ -48,7 +48,16 @@ class Doc:
         
     def dismissDoc(self, medId):
         if self.doc != ():
-            return db_d.dismissDoc(self.doc["CF"], medId)
+            res = db_d.controlDismissDoc(self.doc["CF"])
+            copyList = res["booking"][:]
+            for b in res["booking"]:
+                for e in res["executions"]:
+                    if e["id"] == b["practical_num"]:
+                        copyList.remove(b)
+            if len(copyList) == 0:
+                return db_d.dismissDoc(self.doc["CF"], medId)
+            else:
+                return "-1" #->"Dottore impegnato in prenotazioni"
         else:
             return False
         

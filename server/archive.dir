@@ -1,2 +1,3 @@
 'manager', (0, 88)
 'session', (512, 6)
+'sessionMedical', (1024, 26)

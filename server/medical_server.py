@@ -273,12 +273,15 @@ def dismissDoc():
     token = request.json["token"]
     if token in session:
         res = doc.Doc.getDocAssignment(session[token])
+        CF = request.json["CF"]
         for r in res:
-            CF = request.json["CF"]
             if r["CF"] == CF:
                 Doc = doc.Doc(CF)
-                if Doc.dismissDoc(session[token]):
+                dismiss = Doc.dismissDoc(session[token])
+                if dismiss == True:
                     return "0" #->"Dottore rimosso dai dipendenti"
+                elif dismiss == "-1":
+                    return "-3" #->"Dottore impegnato in prenotazioni"
         return "-1" #->"Errore eliminazione"
     else:
         return "-2" #->"Autenticazione fallita"

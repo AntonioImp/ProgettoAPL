@@ -65,6 +65,14 @@ def dismissDoc(CF, medId):
     query = "DELETE FROM docs_list WHERE CF = '" + CF + "' AND id = " + str(medId)
     return db.execute(query)
 
+def controlDismissDoc(CF):
+    query = "SELECT * FROM booking WHERE CF_M = '" + CF + "'"
+    query2 = "SELECT * FROM executions"
+    res = {}
+    res["booking"] = db.fetch(query)
+    res["executions"] = db.fetch(query2)
+    return res
+
     
 if __name__ == "__main__":
     print(getDocs())
