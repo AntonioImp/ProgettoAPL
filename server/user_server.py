@@ -8,8 +8,8 @@ import shelve
 
 user_server = Blueprint("user_server", __name__, static_folder = "static")
 with shelve.open('archive') as archive:
-    if "session" in archive:
-        session = archive['session']
+    if "sessionUser" in archive:
+        session = archive['sessionUser']
     else:
         session = {}
 
@@ -25,11 +25,15 @@ def login():
     CF = request.json["CF"]
     user = u.User(CF)
     if user.getUser() != False and user.getPassword() == request.json["pass"]:
+        for key, value in session.items():
+            if value == CF:
+                return key #->"L'utente è già loggato, torno il token"
+        
         token = token_generator(10)
         session[token] = CF
 
         with shelve.open('archive') as archive:
-            archive['session'] = session
+            archive['sessionUser'] = session
 
         res = {}
         res["token"] = token
@@ -81,7 +85,7 @@ def logout():
     session.pop(request.args["token"])
 
     with shelve.open('archive') as archive:
-        archive['session'] = session
+        archive['sessionUser'] = session
 
     return "0" #->"Logout effettuato"
 

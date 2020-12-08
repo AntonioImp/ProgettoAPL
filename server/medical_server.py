@@ -8,8 +8,8 @@ import shelve
 
 medical_server = Blueprint("medical_server", __name__, static_folder = "static")
 with shelve.open('archive') as archive:
-    if "session" in archive:
-        session = archive['session']
+    if "sessionMedical" in archive:
+        session = archive['sessionMedical']
     else:
         session = {}
 
@@ -25,11 +25,15 @@ def login():
     medId = int(request.json["id"])
     medical = med.Medicalcenter(medId)
     if medical.getMedicalcenter() != False and request.json["pass"] == medical.getPassword():
+        for key, value in session.items():
+            if value == medId:
+                return key #->"L'utente è già loggato, torno il token"
+        
         token = token_generator(10)
         session[token] = medId
 
         with shelve.open('archive') as archive:
-            archive['session'] = session
+            archive['sessionMedical'] = session
 
         return token
     else:
@@ -62,7 +66,7 @@ def logout():
     session.pop(request.args["token"])
 
     with shelve.open('archive') as archive:
-        archive['session'] = session
+        archive['sessionMedical'] = session
     
     return "0" #->"Logout effettuato"
 
