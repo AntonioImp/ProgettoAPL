@@ -71,9 +71,9 @@ def setDay():
         archive['manager'] = manager
     return "0" #->"Giorno aggiornato"
 
-@app.route("/getday", methods = ["POST"])
+@app.route("/getday")
 def getDay():
-    return CalendarManager.getInstance().getDate()
+    return str(CalendarManager.getInstance().getDate())
 
 
 if __name__ == "__main__":
