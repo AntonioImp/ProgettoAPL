@@ -25,21 +25,24 @@ def login():
     CF = request.json["CF"]
     user = u.User(CF)
     if user.getUser() != False and user.getPassword() == request.json["pass"]:
-        for key, value in session.items():
-            if value == CF:
-                return key #->"L'utente è già loggato, torno il token"
-        
-        token = token_generator(10)
-        session[token] = CF
+        try:
+            for key, value in session.items():
+                if value == CF:
+                    raise Exception(key) #return key #->"L'utente è già loggato, torno il token"
+            
+            token = token_generator(10)
+            session[token] = CF
 
-        with shelve.open('archive') as archive:
-            archive['sessionUser'] = session
-
-        res = {}
-        res["token"] = token
-        for key, value in user.getUser().items():
-            res[key] = value
-        return res
+            with shelve.open('archive') as archive:
+                archive['sessionUser'] = session
+        except Exception as e:
+            token = str(e)
+        finally:
+            res = {}
+            res["token"] = token
+            for key, value in user.getUser().items():
+                res[key] = value
+            return res
     else:
         return "False"
 

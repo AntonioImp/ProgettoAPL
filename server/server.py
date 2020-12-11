@@ -8,6 +8,7 @@ import shelve
 import datetime
 
 app = Flask(__name__)
+app.debug = False
 app.register_blueprint(user_server, url_prefix = "/user")
 app.register_blueprint(medical_server, url_prefix = "/medical")
 app.secret_key = os.urandom(16)
