@@ -25,17 +25,28 @@ def login():
     medId = int(request.json["id"])
     medical = med.Medicalcenter(medId)
     if medical.getMedicalcenter() != False and request.json["pass"] == medical.getPassword():
-        for key, value in session.items():
-            if value == medId:
-                return key #->"L'utente è già loggato, torno il token"
-        
-        token = token_generator(10)
-        session[token] = medId
+        try:
+            for key, value in session.items():
+                if value == medId:
+                    raise Exception(key) #->"L'utente è già loggato, torno il token"
+            
+            token = token_generator(10)
+            session[token] = medId
 
-        with shelve.open('archive') as archive:
-            archive['sessionMedical'] = session
-
-        return token
+            with shelve.open('archive') as archive:
+                archive['sessionMedical'] = session
+        except Exception as e:
+            token = str(e)
+        finally:
+            res = {}
+            res["token"] = token
+            for key, value in medical.getMedicalcenter().items():
+                if type(value) == int and type(value) == str:
+                    res[key] = value
+                else:
+                    res[key] = str(value)
+            print(res)
+            return res
     else:
         return "False"
 
