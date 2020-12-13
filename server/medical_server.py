@@ -319,10 +319,21 @@ def getBooked():
         medical = med.Medicalcenter(session[token])
         res = medical.getBooked()
         json = {}
-        for i, r in enumerate(res):
-            r["date"] = str(r["date"])
-            r["time"] = str(r["time"])
-            json[i] = r
+        complete = {}
+        if res["complete"]:
+            for i, r in enumerate(res["complete"]):
+                r["date"] = str(r["date"])
+                r["time"] = str(r["time"])
+                r["time_taken"] = str(r["time_taken"])
+                complete[i] = r
+        json["complete"] = complete
+        incomplete = {}
+        if res["incomplete"]:
+            for i, r in enumerate(res["incomplete"]):
+                r["date"] = str(r["date"])
+                r["time"] = str(r["time"])
+                incomplete[i] = r
+        json["incomplete"] = incomplete
         return json
     else:
         return "-2" #->"Autenticazione fallita"

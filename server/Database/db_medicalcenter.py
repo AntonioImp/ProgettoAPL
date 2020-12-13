@@ -17,8 +17,12 @@ def getPassword(medId):
     return db.fetch(query)
 
 def getBooked(medId):
+    res = {}
     query = "SELECT * FROM booking WHERE ID_M = " + str(medId)
-    return db.fetch(query)
+    res["booked"] = db.fetch(query)
+    query = "SELECT * FROM executions"
+    res["execution"] = db.fetch(query)
+    return res
 
 def insertMedicalcenter(mc, password):
     query = "INSERT INTO medical_centers(p_IVA, phone, mail, CAP, city, street, n_cv)"

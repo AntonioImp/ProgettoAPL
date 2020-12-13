@@ -83,6 +83,12 @@ class User:
             return db_u.getBooked(self.user["CF"])
         else:
             return False
+
+    def getExecutions(self):
+        if self.user != ():
+            return db_u.getExecutions()
+        else:
+            return False
     
     def deleteBooked(self, practical_num):
         if self.user != ():

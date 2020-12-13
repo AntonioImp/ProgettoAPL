@@ -43,7 +43,36 @@ class Medicalcenter:
     
     def getBooked(self):
         if self.medicalcenter != ():
-            return db_m.getBooked(self.medicalcenter["id"])
+            res = db_m.getBooked(self.medicalcenter["id"])
+            execution = res["execution"]
+            booked = res["booked"]
+            if execution == ():
+                res = {}
+                res["complete"] = False
+                res["incomplete"] = booked
+            elif booked == ():
+                res = {}
+                res["complete"] = False
+                res["incomplete"] = False
+            else:
+                incomplete = booked[:]
+                complete = booked[:]
+                for i, b in enumerate(booked):
+                    for e in execution:
+                        if e["id"] == b["practical_num"]:
+                            incomplete.remove(b)
+                            complete[i]["time_taken"] = e["time_taken"]
+                            complete[i]["result"] = e["result"]
+                indexes = []
+                for i, c in enumerate(complete):
+                    if "result" not in c:
+                        indexes.append(i)
+                for index in indexes:
+                    del complete[index]
+                res = {}
+                res["complete"] = complete
+                res["incomplete"] = incomplete
+            return res
         else:
             return False
 
@@ -79,7 +108,6 @@ class Medicalcenter:
             return res
         else:
             return False
-
         
     def deleteMedicalcenter(self):
         if self.medicalcenter != ():

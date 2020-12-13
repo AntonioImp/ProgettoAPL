@@ -9,7 +9,7 @@ import shelve
 import datetime
 
 app = Flask(__name__)
-app.debug = False
+app.debug = True
 app.register_blueprint(user_server, url_prefix = "/user")
 app.register_blueprint(medical_server, url_prefix = "/medical")
 app.secret_key = os.urandom(16)
@@ -71,7 +71,6 @@ def setDay():
     manager = CalendarManager.getInstance()
     manager.setDate(dt.date())
     manager.initCalendarDict()
-    print(manager.getCalendarDict())
     flag = None
     with shelve.open('archive') as archive:
         archive['manager'] = manager
