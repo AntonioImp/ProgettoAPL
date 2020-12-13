@@ -3,3 +3,5 @@ server/Database/__pycache__
 server/Class/__pycache__
 server/test
 .vscode
+server/.ipynb_checkpoints
+server/.vscode
