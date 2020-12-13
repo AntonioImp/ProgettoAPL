@@ -12,6 +12,7 @@ with shelve.open('archive') as archive:
         session = archive['sessionUser']
     else:
         session = {}
+    archive.close()
 
 """ Generatore di token alfanumerici """
 def token_generator(size):
@@ -35,6 +36,7 @@ def login():
 
             with shelve.open('archive') as archive:
                 archive['sessionUser'] = session
+                archive.close()
         except Exception as e:
             token = str(e)
         finally:
@@ -89,6 +91,7 @@ def logout():
 
     with shelve.open('archive') as archive:
         archive['sessionUser'] = session
+        archive.close()
 
     return "0" #->"Logout effettuato"
 
@@ -216,9 +219,10 @@ def getCalendar():
     if token in session:
         with shelve.open('archive') as archive:
             manager = archive['manager']
+            archive.close()
         calendarDict = manager.getCalendarDict()
         if not calendarDict:
-            return "-1" #->"Non si effettuano tamponi la domenica"
+            return "-1" #->"Non si effettuano tamponi la domenica o non è presente alcun medical center"
         res = calendarDict[int(request.json["id"])].getCalendar()
         if res != False:
             json = {}
@@ -239,6 +243,7 @@ def setBooking():
     if token in session:
         with shelve.open('archive') as archive:
             manager = archive['manager']
+            archive.close()
         calendarDict = manager.getCalendarDict()
         
         if not calendarDict:
@@ -271,6 +276,7 @@ def setBooking():
         if res["ins"]:
             with shelve.open('archive') as archive:
                 archive['manager'] = manager
+                archive.close()
             return str(res["lastId"]) #->"Prenotazione inserita, torna l'id"
         else:
             return "-4" #->"Errore inserimento prenotazione"

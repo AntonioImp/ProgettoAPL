@@ -1,5 +1,6 @@
 {
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 60000,
-    "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe"
+    "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe",
+    "jupyter.jupyterServerType": "local"
 }

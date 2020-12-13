@@ -12,6 +12,7 @@ with shelve.open('archive') as archive:
         session = archive['sessionMedical']
     else:
         session = {}
+    archive.close()
 
 """ Generatore di token alfanumerici """
 def token_generator(size):
@@ -35,6 +36,7 @@ def login():
 
             with shelve.open('archive') as archive:
                 archive['sessionMedical'] = session
+                archive.close()
         except Exception as e:
             token = str(e)
         finally:
@@ -78,6 +80,7 @@ def logout():
 
     with shelve.open('archive') as archive:
         archive['sessionMedical'] = session
+        archive.close()
     
     return "0" #->"Logout effettuato"
 
@@ -288,10 +291,19 @@ def dismissDoc():
         for r in res:
             if r["CF"] == CF:
                 Doc = doc.Doc(CF)
-                dismiss = Doc.dismissDoc(session[token])
+                with shelve.open('archive') as archive:
+                    manager = archive['manager']
+                    archive.close()
+                dismiss = Doc.dismissDoc(session[token], manager.getDate())
                 if dismiss == True:
                     return "0" #->"Dottore rimosso dai dipendenti"
                 elif dismiss == "-1":
+                    with shelve.open('archive') as archive:
+                        if 'flag' not in archive:
+                            archive['flag'] = [(CF, session[token])]
+                        else:
+                            archive['flag'] += [(CF, session[token])]
+                        archive.close()
                     return "-3" #->"Dottore impegnato in prenotazioni"
         return "-1" #->"Errore eliminazione"
     else:

@@ -67,11 +67,7 @@ def dismissDoc(CF, medId):
 
 def controlDismissDoc(CF):
     query = "SELECT * FROM booking WHERE CF_M = '" + CF + "'"
-    query2 = "SELECT * FROM executions"
-    res = {}
-    res["booking"] = db.fetch(query)
-    res["executions"] = db.fetch(query2)
-    return res
+    return db.fetch(query)
 
     
 if __name__ == "__main__":

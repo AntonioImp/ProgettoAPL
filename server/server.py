@@ -3,6 +3,7 @@ from user_server import user_server
 from medical_server import medical_server
 import Class.medicalcenter as m
 import Class.myCalendar as c
+import Class.doc as d
 import os
 import shelve
 import datetime
@@ -33,8 +34,10 @@ class CalendarManager:
 
     def initCalendarDict(self):
         try:
+            self.calendarDict = False
             medical = m.Medicalcenter.getMedicalcenters()
             if medical != False:
+                self.calendarDict = {}
                 for med in medical:
                     calendar = c.MyCalendar(med["id"], self.currentDay)
                     calendar.updateCalendar(self.currentDay)
@@ -68,8 +71,17 @@ def setDay():
     manager = CalendarManager.getInstance()
     manager.setDate(dt.date())
     manager.initCalendarDict()
+    print(manager.getCalendarDict())
+    flag = None
     with shelve.open('archive') as archive:
         archive['manager'] = manager
+        if 'flag' in archive:
+            flag = archive['flag']
+            del archive['flag']
+        archive.close()
+    if flag != None:
+        for f in flag:
+            d.Doc(f[0]).dismissDoc(f[1], manager.getDate()) #->"Elimino dottori che hanno completato la prenotazione e dovevano essere dimessi"
     return "0" #->"Giorno aggiornato"
 
 @app.route("/getday")
@@ -81,4 +93,5 @@ if __name__ == "__main__":
     manager = CalendarManager.getInstance()
     with shelve.open('archive') as archive:
         archive['manager'] = manager
+        archive.close()
     app.run()
