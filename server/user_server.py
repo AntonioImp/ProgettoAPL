@@ -290,12 +290,23 @@ def getBooked():
     token = request.json["token"]
     if token in session:
         user = u.User(session[token])
-        res = user.getBooked()
+        res = user.getBookedComplete()
         json = {}
-        for i, r in enumerate(res):
-            r["date"] = str(r["date"])
-            r["time"] = str(r["time"])
-            json[i] = r
+        complete = []
+        if res["complete"]:
+            for r in res["complete"]:
+                r["date"] = str(r["date"])
+                r["time"] = str(r["time"])
+                r["time_taken"] = str(r["time_taken"])
+                complete += [r]
+        json["complete"] = complete
+        incomplete = []
+        if res["incomplete"]:
+            for r in res["incomplete"]:
+                r["date"] = str(r["date"])
+                r["time"] = str(r["time"])
+                incomplete += [r]
+        json["incomplete"] = incomplete
         return json
     else:
         return "-2" #->"Autenticazione fallita"
