@@ -319,20 +319,20 @@ def getBooked():
         medical = med.Medicalcenter(session[token])
         res = medical.getBooked()
         json = {}
-        complete = {}
+        complete = []
         if res["complete"]:
-            for i, r in enumerate(res["complete"]):
+            for r in res["complete"]:
                 r["date"] = str(r["date"])
                 r["time"] = str(r["time"])
                 r["time_taken"] = str(r["time_taken"])
-                complete[i] = r
+                complete += [r]
         json["complete"] = complete
-        incomplete = {}
+        incomplete = []
         if res["incomplete"]:
-            for i, r in enumerate(res["incomplete"]):
+            for r in res["incomplete"]:
                 r["date"] = str(r["date"])
                 r["time"] = str(r["time"])
-                incomplete[i] = r
+                incomplete += [r]
         json["incomplete"] = incomplete
         return json
     else:

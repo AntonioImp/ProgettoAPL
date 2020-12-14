@@ -67,7 +67,7 @@ class Medicalcenter:
                 for i, c in enumerate(complete):
                     if "result" not in c:
                         indexes.append(i)
-                for index in indexes:
+                for index in sorted(indexes, reverse=True):
                     del complete[index]
                 res = {}
                 res["complete"] = complete
