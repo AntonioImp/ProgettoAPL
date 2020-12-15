@@ -53,6 +53,10 @@ def deleteMedicalcenter(medId):
     query = "DELETE FROM medical_centers WHERE id = " + str(medId)
     return db.execute(query)
 
+def insertExecutions(id, time_taken, result):
+    query = "INSERT INTO executions(id, time_taken, result) VALUES (" + str(id) + ",'" + time_taken + "','" + result + "')"
+    return db.execute(query)
+
 if __name__ == "__main__":
     #print(getMedicalcenters())
     #print(getMedicalcenter(17))

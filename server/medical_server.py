@@ -138,7 +138,7 @@ def updateTiming():
         except:
             return "-3" #->"Formato orario errato"
         if medical.updateTiming(request.json["start_time"], request.json["end_time"], request.json["default_interval"]):
-            return "0" #->"Password aggiornata"
+            return "0" #->"Tempistiche aggiornata"
         else:
             return "-1" #->"Aggiornamento fallito"
     else:
@@ -335,6 +335,24 @@ def getBooked():
                 incomplete += [r]
         json["incomplete"] = incomplete
         return json
+    else:
+        return "-2" #->"Autenticazione fallita"
+
+
+""" Parametri da passare al metodo getbooked: token, id prenotazione(id), tempo impiegato(time), risultato(result) """
+@medical_server.route("/insertexec", methods=["POST"])
+def insertExecution():
+    token = request.json["token"]
+    if token in session:
+        try:
+            time_f = '%H:%M:%S'
+            datetime.datetime.strptime(request.json["time"], time_f)
+        except:
+            return "-3" #->"Formato orario errato"
+        if med.Medicalcenter.insertExecution(request.json["id"], request.json["time"], request.json["result"]):
+            return "0" #->"Esecuzione inserita"
+        else:
+            return "-1" #->"Errore inserimento"
     else:
         return "-2" #->"Autenticazione fallita"
 

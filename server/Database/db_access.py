@@ -4,7 +4,7 @@ class DBHelper:
 
     def __init__(self):
         self.host = "localhost"
-        self.user = "antonio"
+        self.user = "root"
         self.password = "root"
         self.db = "gestione_tamponi"
 

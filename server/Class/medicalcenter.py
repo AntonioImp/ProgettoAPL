@@ -76,6 +76,10 @@ class Medicalcenter:
         else:
             return False
 
+    @staticmethod
+    def insertExecution(id, time_taken, result):
+        return db_m.insertExecutions(id, time_taken, result)
+
     """ return tuple -> (bool, bool, medical center id)"""
     def insertMedicalcenter(self):
         if self.medicalcenter != ():

@@ -89,8 +89,6 @@ class User:
             booked = db_u.getBooked(self.user["CF"])
             execution = db_u.getExecutions()
             res = {}
-            print(booked)
-            print(execution)
             if execution == ():
                 res["complete"] = False
                 res["incomplete"] = booked
