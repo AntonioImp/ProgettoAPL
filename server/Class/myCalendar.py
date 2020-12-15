@@ -26,7 +26,7 @@ class MyCalendar:
             raise Exception("Domenica non vengono effettuati tamponi!")
         results = db_c.startCalendar(medId, giorno)
         self.medicalcenter = results[0]
-        doc_timing = sorted(results[1], key=lambda l: l["date"], reverse=True)
+        doc_timing = results[1]
         docs = results[2]
 
         interval = {}
