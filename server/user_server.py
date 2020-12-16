@@ -31,7 +31,10 @@ def login():
                 if value == CF:
                     raise Exception(key) #return key #->"L'utente è già loggato, torno il token"
             
-            token = token_generator(10)
+            while True:
+                token = token_generator(10)
+                if token not in session:
+                    break
             session[token] = CF
 
             with shelve.open('archive') as archive:

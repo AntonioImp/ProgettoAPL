@@ -6,7 +6,8 @@ import Database.db_medicalcenter as db_m
 
 class Medicalcenter:
     """Constructor medicalcenter class accepts a dictionary with template (first parameter) as:
-    {"p_IVA": "",
+    {"medName": "",
+    "p_IVA": "",
     "phone": "",
     "mail": "",
     "CAP": "",
@@ -16,11 +17,11 @@ class Medicalcenter:
     and password as second parameter"""
     
     def __init__(self, med, *password):
-        if type(med) == int:
+        if type(med) == str:
             self.medicalcenter = db_m.getMedicalcenter(med)
             if self.medicalcenter != ():
                 self.medicalcenter = self.medicalcenter[0]
-                self.password = db_m.getPassword(med)[0]["password"]
+                self.password = db_m.getPassword(self.medicalcenter["id"])[0]["password"]
         else:
             self.medicalcenter = med
             self.password = password[0]

@@ -20,18 +20,22 @@ def token_generator(size):
     return token
 
 
-""" Parametri da passare al metodo login: id, password"""
+""" Parametri da passare al metodo login: medName, password"""
 @medical_server.route("/login", methods = ["POST"])
 def login():
-    medId = int(request.json["id"])
-    medical = med.Medicalcenter(medId)
+    medName = request.json["medName"]
+    medical = med.Medicalcenter(medName)
     if medical.getMedicalcenter() != False and request.json["pass"] == medical.getPassword():
         try:
             for key, value in session.items():
+                medId = medical.getMedicalcenter()["id"]
                 if value == medId:
                     raise Exception(key) #->"L'utente è già loggato, torno il token"
             
-            token = token_generator(10)
+            while True:
+                token = token_generator(10)
+                if token not in session:
+                    break
             session[token] = medId
 
             with shelve.open('archive') as archive:

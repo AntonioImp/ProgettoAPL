@@ -26,15 +26,8 @@ class MyCalendar:
             raise Exception("Domenica non vengono effettuati tamponi!")
         results = db_c.startCalendar(medId, giorno)
         self.medicalcenter = results[0]
-        doc_timing = results[1]
+        interval = results[1]
         docs = results[2]
-
-        interval = {}
-        for doc in docs:
-            for d in doc_timing:
-                if doc == d["CF"]:
-                    interval[doc] = d["avarage_time"]
-                    break
         
         for doc in docs:
             if doc not in interval:
@@ -110,8 +103,8 @@ class MyCalendar:
 
 
 if __name__ == "__main__":
-    cal = MyCalendar(15)
-    print(cal.removeBooked('08:30:00', 'C'))
-    print(cal.getCalendar())
-    print(cal.reinsertBooked('08:30:00', 'C'))
-    print(cal.getCalendar())
+    cal = MyCalendar(15, datetime.date(2020,12,14))
+    #print(cal.removeBooked('08:30:00', 'C'))
+    #print(cal.getCalendar())
+    #print(cal.reinsertBooked('08:30:00', 'C'))
+    #print(cal.getCalendar())

@@ -6,10 +6,10 @@ import Database.db_access as db_access
 db = db_access.DBHelper()
 
 def getMedicalcenters():
-    return db.fetch("SELECT id, phone, mail, CAP, city, street, n_cv FROM medical_centers")
+    return db.fetch("SELECT id, medical_name, phone, mail, CAP, city, street, n_cv FROM medical_centers")
 
-def getMedicalcenter(medId):
-    query = "SELECT * FROM medical_centers WHERE id = " + str(medId)
+def getMedicalcenter(medName):
+    query = "SELECT * FROM medical_centers WHERE medical_name = '" + str(medName) + "'"
     return db.fetch(query)
 
 def getPassword(medId):

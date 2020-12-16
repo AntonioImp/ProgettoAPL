@@ -44,7 +44,7 @@ class CalendarManager:
                     self.calendarDict[med["id"]] = calendar
                 print("CalendarDict creato")
         except Exception as e:
-            print(e)
+            print("Error:", e)
             self.calendarDict = False
 
     def getCalendarDict(self):
