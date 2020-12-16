@@ -45,8 +45,8 @@ class Medicalcenter:
     def getBooked(self):
         if self.medicalcenter != ():
             booked = db_m.getBooked(self.medicalcenter["id"])
+            res = {}
             if booked == ():
-                res = {}
                 res["complete"] = False
                 res["incomplete"] = False
             else:
@@ -66,7 +66,6 @@ class Medicalcenter:
                 for i in incomplete:
                     del i["time_taken"]
                     del i["result"]
-                res = {}
                 res["complete"] = complete
                 res["incomplete"] = incomplete
             return res

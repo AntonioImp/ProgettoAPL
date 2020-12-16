@@ -87,29 +87,27 @@ class User:
     def getBookedComplete(self):
         if self.user != ():
             booked = db_u.getBooked(self.user["CF"])
-            execution = db_u.getExecutions()
             res = {}
-            if execution == ():
-                res["complete"] = False
-                res["incomplete"] = booked
-            elif booked == ():
+            if booked == ():
                 res["complete"] = False
                 res["incomplete"] = False
             else:
                 incomplete = booked[:]
                 complete = booked[:]
+                indexesI = []
+                indexesC = []
                 for i, b in enumerate(booked):
-                    for e in execution:
-                        if e["id"] == b["practical_num"]:
-                            incomplete.remove(b)
-                            complete[i]["time_taken"] = e["time_taken"]
-                            complete[i]["result"] = e["result"]
-                indexes = []
-                for i, c in enumerate(complete):
-                    if "result" not in c:
-                        indexes.append(i)
-                for index in sorted(indexes, reverse=True):
-                    del complete[index]
+                    if b['result'] != None:
+                        indexesI.append(i)
+                    else:
+                        indexesC.append(i)
+                for i in sorted(indexesI, reverse=True):
+                    del incomplete[i] 
+                for i in sorted(indexesC, reverse=True):
+                    del complete[i]
+                for i in incomplete:
+                    del i["time_taken"]
+                    del i["result"]
                 res["complete"] = complete
                 res["incomplete"] = incomplete
             return res
