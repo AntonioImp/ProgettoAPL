@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 06, 2020 alle 19:42
+-- Creato il: Dic 16, 2020 alle 11:18
 -- Versione del server: 10.4.14-MariaDB
 -- Versione PHP: 7.4.11
 
@@ -33,17 +33,19 @@ CREATE TABLE `booking` (
   `ID_M` int(11) NOT NULL,
   `CF_M` varchar(16) NOT NULL,
   `date` date NOT NULL,
-  `time` time NOT NULL
+  `time` time NOT NULL,
+  `time_taken` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `booking`
 --
 
-INSERT INTO `booking` (`practical_num`, `CF_U`, `ID_M`, `CF_M`, `date`, `time`) VALUES
-(1, 'MPLNTN96S25F158E', 15, 'C', '2020-12-05', '08:30:00'),
-(3, 'MPLNTN96S25F158E', 15, 'C', '2020-12-07', '08:37:00'),
-(4, 'MPLNTN96S25F158E', 10, 'F', '2020-12-07', '08:50:00');
+INSERT INTO `booking` (`practical_num`, `CF_U`, `ID_M`, `CF_M`, `date`, `time`, `time_taken`) VALUES
+(1, 'MPLNTN96S25F158E', 15, 'C', '2020-12-05', '08:30:00', NULL),
+(6, 'MPLNTN96S25F158E', 15, 'C', '2020-12-07', '08:44:00', NULL),
+(7, 'B', 15, 'G', '2020-12-07', '08:51:00', NULL),
+(9, 'MPLNTN96S25F158E', 15, 'I', '2020-12-14', '08:40:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -78,23 +80,24 @@ CREATE TABLE `docs` (
   `name` varchar(40) NOT NULL,
   `surname` varchar(40) NOT NULL,
   `phone` varchar(10) NOT NULL,
-  `mail` varchar(254) NOT NULL
+  `mail` varchar(254) NOT NULL,
+  `avarage_time` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `docs`
 --
 
-INSERT INTO `docs` (`CF`, `name`, `surname`, `phone`, `mail`) VALUES
-('A', 'A', 'A', 'A', 'A'),
-('B', 'B', 'B', 'B', 'B'),
-('C', 'C', 'C', 'C', 'C'),
-('D', 'D', 'D', 'D', 'D'),
-('E', 'E', 'E', 'E', 'E'),
-('F', 'F', 'F', 'F', 'F'),
-('G', 'G', 'G', 'G', 'G'),
-('H', 'H', 'H', 'H', 'H'),
-('I', 'I', 'I', 'I', 'I');
+INSERT INTO `docs` (`CF`, `name`, `surname`, `phone`, `mail`, `avarage_time`) VALUES
+('A', 'A', 'A', 'A', 'A', NULL),
+('B', 'B', 'B', 'B', 'B', NULL),
+('C', 'C', 'C', 'C', 'C', NULL),
+('D', 'D', 'D', 'D', 'D', NULL),
+('E', 'E', 'E', 'E', 'E', NULL),
+('F', 'F', 'F', 'F', 'F', NULL),
+('G', 'G', 'G', 'G', 'G', NULL),
+('H', 'H', 'H', 'H', 'H', NULL),
+('I', 'I', 'I', 'I', 'I', NULL);
 
 -- --------------------------------------------------------
 
@@ -120,47 +123,12 @@ INSERT INTO `docs_list` (`CF`, `day`, `id`) VALUES
 ('E', 'lunedì', 12),
 ('F', 'lunedì', 10),
 ('G', 'lunedì', 15),
+('G', 'giovedì', 15),
 ('H', 'lunedì', 15),
 ('H', 'martedì', 15),
-('H', 'mercoledì', 15),
 ('H', 'giovedì', 10),
-('I', 'lunedì', 15),
 ('I', 'martedì', 15),
-('I', 'mercoledì', 15);
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `doc_timing`
---
-
-CREATE TABLE `doc_timing` (
-  `CF` varchar(16) NOT NULL,
-  `date` date NOT NULL,
-  `swab_n` int(11) NOT NULL,
-  `avarage_time` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dump dei dati per la tabella `doc_timing`
---
-
-INSERT INTO `doc_timing` (`CF`, `date`, `swab_n`, `avarage_time`) VALUES
-('C', '2020-12-04', 20, '00:05:00'),
-('C', '2020-12-05', 30, '00:07:00'),
-('G', '2020-12-04', 30, '00:03:00');
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `executions`
---
-
-CREATE TABLE `executions` (
-  `id` int(11) NOT NULL,
-  `time_taken` time NOT NULL,
-  `result` enum('positivo','negativo') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+('I', 'giovedì', 15);
 
 -- --------------------------------------------------------
 
@@ -170,6 +138,7 @@ CREATE TABLE `executions` (
 
 CREATE TABLE `medical_centers` (
   `id` int(11) NOT NULL,
+  `medical_name` varchar(40) NOT NULL,
   `p_IVA` varchar(11) NOT NULL,
   `phone` varchar(10) NOT NULL,
   `mail` varchar(254) NOT NULL,
@@ -186,12 +155,12 @@ CREATE TABLE `medical_centers` (
 -- Dump dei dati per la tabella `medical_centers`
 --
 
-INSERT INTO `medical_centers` (`id`, `p_IVA`, `phone`, `mail`, `CAP`, `city`, `street`, `n_cv`, `start_time`, `end_time`, `default_interval`) VALUES
-(10, 'B', 'B', 'antonioimpala251196@gmail.com', 'B', 'B', 'B', 24, '08:00:00', '12:00:00', '00:10:00'),
-(12, 'C', 'C', 'C', 'C', 'C', 'C', 24, '08:00:00', '12:00:00', '00:10:00'),
-(13, 'D', 'D', 'D', 'D', 'D', 'D', 24, '08:00:00', '12:00:00', '00:10:00'),
-(15, 'E', 'E', 'E', 'E', 'E', 'E', 24, '08:30:00', '12:00:00', '00:10:00'),
-(17, 'F', 'F', 'F', 'F', 'F', 'F', 24, '09:00:00', '11:00:00', '00:15:00');
+INSERT INTO `medical_centers` (`id`, `medical_name`, `p_IVA`, `phone`, `mail`, `CAP`, `city`, `street`, `n_cv`, `start_time`, `end_time`, `default_interval`) VALUES
+(10, 'B', 'B', 'B', 'antonioimpala251196@gmail.com', 'B', 'B', 'B', 24, '08:00:00', '12:00:00', '00:10:00'),
+(12, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 24, '08:00:00', '12:00:00', '00:10:00'),
+(13, 'D', 'D', 'D', 'D', 'D', 'D', 'D', 24, '08:00:00', '12:00:00', '00:10:00'),
+(15, 'E', 'E', 'E', 'E', 'E', 'E', 'E', 24, '08:30:00', '12:00:00', '00:10:00'),
+(17, 'F', 'F', 'F', 'F', 'F', 'F', 'F', 24, '09:00:00', '11:00:00', '00:15:00');
 
 -- --------------------------------------------------------
 
@@ -281,25 +250,13 @@ ALTER TABLE `docs_list`
   ADD KEY `docs_list_ibfk_2` (`id`);
 
 --
--- Indici per le tabelle `doc_timing`
---
-ALTER TABLE `doc_timing`
-  ADD PRIMARY KEY (`CF`,`date`);
-
---
--- Indici per le tabelle `executions`
---
-ALTER TABLE `executions`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indici per le tabelle `medical_centers`
 --
 ALTER TABLE `medical_centers`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `VAT_number` (`p_IVA`),
   ADD UNIQUE KEY `phone` (`phone`),
-  ADD UNIQUE KEY `VAT_number_2` (`p_IVA`);
+  ADD UNIQUE KEY `medical_name` (`medical_name`);
 
 --
 -- Indici per le tabelle `medical_center_credentials`
@@ -323,7 +280,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT per la tabella `medical_centers`
@@ -355,18 +312,6 @@ ALTER TABLE `credentials`
 ALTER TABLE `docs_list`
   ADD CONSTRAINT `docs_list_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `docs` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `docs_list_ibfk_2` FOREIGN KEY (`id`) REFERENCES `medical_centers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limiti per la tabella `doc_timing`
---
-ALTER TABLE `doc_timing`
-  ADD CONSTRAINT `doc_timing_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `docs` (`CF`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limiti per la tabella `executions`
---
-ALTER TABLE `executions`
-  ADD CONSTRAINT `executions_ibfk_1` FOREIGN KEY (`id`) REFERENCES `booking` (`practical_num`);
 
 --
 -- Limiti per la tabella `medical_center_credentials`
