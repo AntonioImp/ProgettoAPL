@@ -321,8 +321,8 @@ def deleteBooked():
         res = user.getBooked()
         res2 = None
         for r in res:
-            if r["practical_num"] == request.json["id"]:
-                res2 = user.deleteBooked(request.json["id"])
+            if r["practical_num"] == int(request.json["id"]):
+                res2 = user.deleteBooked(int(request.json["id"]))
         if res2 == None:
             return "-1" #->"Prenotazione non trovata"
         elif res2:
