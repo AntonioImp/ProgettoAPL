@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 16, 2020 alle 11:18
+-- Creato il: Dic 16, 2020 alle 15:59
 -- Versione del server: 10.4.14-MariaDB
 -- Versione PHP: 7.4.11
 
@@ -34,18 +34,17 @@ CREATE TABLE `booking` (
   `CF_M` varchar(16) NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
-  `time_taken` time DEFAULT NULL
+  `time_taken` time DEFAULT NULL,
+  `result` enum('positivo','negativo') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `booking`
 --
 
-INSERT INTO `booking` (`practical_num`, `CF_U`, `ID_M`, `CF_M`, `date`, `time`, `time_taken`) VALUES
-(1, 'MPLNTN96S25F158E', 15, 'C', '2020-12-05', '08:30:00', NULL),
-(6, 'MPLNTN96S25F158E', 15, 'C', '2020-12-07', '08:44:00', NULL),
-(7, 'B', 15, 'G', '2020-12-07', '08:51:00', NULL),
-(9, 'MPLNTN96S25F158E', 15, 'I', '2020-12-14', '08:40:00', NULL);
+INSERT INTO `booking` (`practical_num`, `CF_U`, `ID_M`, `CF_M`, `date`, `time`, `time_taken`, `result`) VALUES
+(10, 'MPLNTN96S25F158E', 15, 'C', '2020-12-07', '08:33:00', '00:04:00', 'negativo'),
+(11, 'MPLNTN96S25F158E', 15, 'H', '2020-12-16', '08:40:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -91,7 +90,7 @@ CREATE TABLE `docs` (
 INSERT INTO `docs` (`CF`, `name`, `surname`, `phone`, `mail`, `avarage_time`) VALUES
 ('A', 'A', 'A', 'A', 'A', NULL),
 ('B', 'B', 'B', 'B', 'B', NULL),
-('C', 'C', 'C', 'C', 'C', NULL),
+('C', 'C', 'C', 'C', 'C', '00:03:00'),
 ('D', 'D', 'D', 'D', 'D', NULL),
 ('E', 'E', 'E', 'E', 'E', NULL),
 ('F', 'F', 'F', 'F', 'F', NULL),
@@ -126,8 +125,11 @@ INSERT INTO `docs_list` (`CF`, `day`, `id`) VALUES
 ('G', 'giovedì', 15),
 ('H', 'lunedì', 15),
 ('H', 'martedì', 15),
+('H', 'mercoledì', 15),
 ('H', 'giovedì', 10),
+('H', 'sabato', 15),
 ('I', 'martedì', 15),
+('I', 'mercoledì', 15),
 ('I', 'giovedì', 15);
 
 -- --------------------------------------------------------
@@ -280,7 +282,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT per la tabella `medical_centers`
