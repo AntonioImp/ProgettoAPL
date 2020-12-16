@@ -324,14 +324,10 @@ def deleteBooked():
     token = request.json["token"]
     if token in session:
         user = u.User(session[token])
-        res = user.getBooked()
-        res2 = None
-        for r in res:
-            if r["practical_num"] == int(request.json["id"]):
-                res2 = user.deleteBooked(int(request.json["id"]))
-        if res2 == None:
+        res = user.deleteBooked(int(request.json["id"]))
+        if res == None:
             return "-1" #->"Prenotazione non trovata"
-        elif res2:
+        elif res:
             return "0" #->"Prenotazione eliminata"
         else:
             return "-3" #->"Errore nell'eliminazione, il tampone potrebbe già essere stato eseguito"

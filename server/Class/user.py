@@ -113,16 +113,17 @@ class User:
             return res
         else:
             return False
-
-    def getExecutions(self):
-        if self.user != ():
-            return db_u.getExecutions()
-        else:
-            return False
     
     def deleteBooked(self, practical_num):
         if self.user != ():
-            return db_u.deleteBooked(practical_num)
+            booked = db_u.getBooked(self.user["CF"])
+            for b in booked:
+                if b["practical_num"] == practical_num:
+                    if b["result"] == None:
+                        return db_u.deleteBooked(practical_num)
+                    else:
+                        return False
+            return None
         else:
             return False
     
