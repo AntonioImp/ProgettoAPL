@@ -8,8 +8,11 @@ db = db_access.DBHelper()
 def getMedicalcenters():
     return db.fetch("SELECT id, medical_name, phone, mail, CAP, city, street, n_cv FROM medical_centers")
 
-def getMedicalcenter(medName):
-    query = "SELECT * FROM medical_centers WHERE medical_name = '" + str(medName) + "'"
+def getMedicalcenter(med):
+    if type(med) == str:
+        query = "SELECT * FROM medical_centers WHERE medical_name = '" + str(med) + "'"
+    else:
+        query = "SELECT * FROM medical_centers WHERE id = " + str(med)
     return db.fetch(query)
 
 def getPassword(medId):
@@ -17,16 +20,12 @@ def getPassword(medId):
     return db.fetch(query)
 
 def getBooked(medId):
-    res = {}
     query = "SELECT * FROM booking WHERE ID_M = " + str(medId)
-    res["booked"] = db.fetch(query)
-    query = "SELECT * FROM executions"
-    res["execution"] = db.fetch(query)
-    return res
+    return db.fetch(query)
 
 def insertMedicalcenter(mc, password):
-    query = "INSERT INTO medical_centers(p_IVA, phone, mail, CAP, city, street, n_cv)"
-    query += " VALUES ( '" + mc["p_IVA"] + "', '" + mc["phone"] + "', '" + mc["mail"]
+    query = "INSERT INTO medical_centers(medical_name, p_IVA, phone, mail, CAP, city, street, n_cv)"
+    query += " VALUES ('" + mc["medName"] + "','" + mc["p_IVA"] + "', '" + mc["phone"] + "', '" + mc["mail"]
     query += "', '" + mc["CAP"] + "', '" + mc["city"] + "', '" + mc["street"] + "', " + str(mc["n_cv"]) + ")"
     res = (db.execute(query),)
     lastId = db.lastInsertId()
@@ -54,7 +53,7 @@ def deleteMedicalcenter(medId):
     return db.execute(query)
 
 def insertExecutions(id, time_taken, result):
-    query = "INSERT INTO executions(id, time_taken, result) VALUES (" + str(id) + ",'" + time_taken + "','" + result + "')"
+    query = "UPDATE booking SET time_taken = '" + time_taken + "', result = '" + result + "' WHERE practical_num = " + str(id)
     return db.execute(query)
 
 if __name__ == "__main__":

@@ -273,8 +273,11 @@ def setBooking():
             "date": manager.getDate(),
             "time": dt.time()
         }
-        if not manager.removeBooked(int(request.json["id"]), dt, request.json["CF_M"]):
-            return "-3" #->"Errore aggiornamento calendario"
+        try:
+            if not manager.removeBooked(int(request.json["id"]), dt, request.json["CF_M"]):
+                return "-3" #->"Errore aggiornamento calendario"
+        except KeyError as e:
+            return "-3" #->"CF doc errato"
         res = user.insertBooking(booking)
         if res["ins"]:
             with shelve.open('archive') as archive:

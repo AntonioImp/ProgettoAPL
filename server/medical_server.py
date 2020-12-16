@@ -61,6 +61,7 @@ def login():
 @medical_server.route("/signup", methods = ["POST"])
 def signup():
     medicalData = {
+        "medName": request.json["medName"],
         "p_IVA": request.json["p_IVA"],
         "phone": request.json["phone"],
         "mail": request.json["mail"],
@@ -96,6 +97,7 @@ def updateMedicalcenter():
     if token in session:
         medId = session[token]
         medicalData = {
+            "medName": request.json["medName"],
             "p_IVA": request.json["p_IVA"],
             "phone": request.json["phone"],
             "mail": request.json["mail"],
@@ -218,13 +220,18 @@ def insertDoc():
         Doc = doc.Doc(docData)
         days = request.json["days"]
         res = Doc.insertDoc(medId, days)
-        print(res)
         if "err" in res:
             return "-1" #->"Errore nell'inserimento. Giorni già impegnati"
         elif "linkIns" in res and not "docIns" in res:
-            return "1" #->"Dottore già in DB. Aggiunto solo ai dipendenti del medical center"
+            ret = "1" #->"Dottore già in DB. Aggiunto solo ai dipendenti del medical center"
         else:
-            return "0" #->"Dottore inserito e assegnato"
+            ret = "0" #->"Dottore inserito e assegnato"
+        with shelve.open('archive') as archive:
+            manager = archive['manager']
+            manager.initCalendarDict()
+            archive['manager'] = manager
+            archive.close()
+        return ret
     else:
         return "-2" #->"Autenticazione fallita"
 
@@ -353,6 +360,8 @@ def insertExecution():
             datetime.datetime.strptime(request.json["time"], time_f)
         except:
             return "-3" #->"Formato orario errato"
+        if request.json["result"] != 'positivo' and request.json["result"] != 'negativo':
+            return "-4" #->"Risultato non valido"
         if med.Medicalcenter.insertExecution(request.json["id"], request.json["time"], request.json["result"]):
             return "0" #->"Esecuzione inserita"
         else:
