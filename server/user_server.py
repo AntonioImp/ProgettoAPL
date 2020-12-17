@@ -20,10 +20,10 @@ def token_generator(size):
     return token
 
         
-""" Parametri da passare al metodo login: CF, password """    
+""" Parametri da passare al metodo login: CF(username), password """    
 @user_server.route("/login", methods = ["POST"])
 def login():
-    CF = request.json["CF"]
+    CF = request.json["username"]
     user = u.User(CF)
     if user.getUser() != False and user.getPassword() == request.json["pass"]:
         try:
