@@ -1,12 +1,16 @@
 import pymysql
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv(dotenv_path='../.env')
 
 class DBHelper:
 
     def __init__(self):
-        self.host = "localhost"
-        self.user = "root"
-        self.password = "root"
-        self.db = "gestione_tamponi"
+        self.host = getenv("HOSTNAME")
+        self.user = getenv("DBUSER")
+        self.password = getenv("DBPASS")
+        self.db = getenv("DBNAME")
 
     def __connect__(self):
         self.con = pymysql.connect(host=self.host,
