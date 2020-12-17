@@ -78,10 +78,10 @@ class MyCalendar:
         else:
             return False
     
-    """def reinsertBooked(self, turn, doc):
-        
+    def reinsertBooked(self, turn, doc):
+        """
         reinsert turn in calendar
-        
+        """
         dt = datetime.datetime.strptime(str(turn), '%H:%M:%S')
         dt.time().replace(second=0)
         if dt.time() not in self.calendar[doc]:
@@ -89,7 +89,7 @@ class MyCalendar:
             self.calendar[doc] = sorted(self.calendar[doc])
             return True
         else:
-            return False"""
+            return False
 
     def getCalendar(self):
         """

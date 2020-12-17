@@ -58,6 +58,9 @@ class CalendarManager:
     
     def removeBooked(self, medId, dt, CF_M):
         return self.calendarDict[medId].removeBooked(turn=dt.time(), doc=CF_M)
+    
+    def reinsertBooked(self, medId, dt, CF_M):
+        return self.calendarDict[medId].reinsertBooked(turn=dt.time(), doc=CF_M)
 
 
 """ Metodi di test per il set e get del giorno corrente, passare day in formato YYYY-MM-DD """

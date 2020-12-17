@@ -283,7 +283,13 @@ def setBooking():
             with shelve.open('archive') as archive:
                 archive['manager'] = manager
                 archive.close()
-            return str(res["lastId"]) #->"Prenotazione inserita, torna l'id"
+            booking["practical_num"] = res["lastId"]
+            booking["time"] = str(booking["time"])
+            booking["date"] = str(booking["date"])
+            json = {}
+            for key, value  in booking.items():
+                json[key] = value
+            return json #->"Prenotazione inserita, torna la prenotazione"
         else:
             return "-4" #->"Errore inserimento prenotazione"
     else:
@@ -328,6 +334,12 @@ def deleteBooked():
         if res == None:
             return "-1" #->"Prenotazione non trovata"
         elif res:
+            with shelve.open("archive") as archive:
+                manager = archive["manager"]
+                if res["date"] == manager.getDate():
+                    res = manager.getCalendarDict()[res["ID_M"]].reinsertBooked(turn=res["time"],doc=res["CF_M"])
+                    archive["manager"] = manager
+                archive.close()
             return "0" #->"Prenotazione eliminata"
         else:
             return "-3" #->"Errore nell'eliminazione, il tampone potrebbe già essere stato eseguito"

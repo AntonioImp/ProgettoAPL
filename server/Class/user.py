@@ -120,9 +120,9 @@ class User:
             for b in booked:
                 if b["practical_num"] == practical_num:
                     if b["result"] == None:
-                        return db_u.deleteBooked(practical_num)
-                    else:
-                        return False
+                        if db_u.deleteBooked(practical_num):
+                            return b
+                    return False
             return None
         else:
             return False
