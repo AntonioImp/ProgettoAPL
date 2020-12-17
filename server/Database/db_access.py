@@ -1,22 +1,17 @@
-import pymysql
 from dotenv import load_dotenv
 from os import getenv
-
-load_dotenv(dotenv_path='../.env')
+import pymysql
 
 class DBHelper:
 
     def __init__(self):
-        self.host = getenv("HOSTNAME")
-        self.user = getenv("DBUSER")
-        self.password = getenv("DBPASS")
-        self.db = getenv("DBNAME")
+        load_dotenv(dotenv_path='../.env')
 
     def __connect__(self):
-        self.con = pymysql.connect(host=self.host,
-                                   user=self.user,
-                                   password=self.password,
-                                   db=self.db,
+        self.con = pymysql.connect(host=getenv("HOSTNAME"),
+                                   user=getenv("DBUSER"),
+                                   password=getenv("DBPASS"),
+                                   db=getenv("DBNAME"),
                                    cursorclass=pymysql.cursors.DictCursor)
         self.cur = self.con.cursor()
 

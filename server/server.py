@@ -1,18 +1,21 @@
 from flask import Flask, request
 from user_server import user_server
 from medical_server import medical_server
+from dotenv import load_dotenv
+from os import getenv, urandom
 import Class.medicalcenter as m
 import Class.myCalendar as c
 import Class.doc as d
-import os
 import shelve
 import datetime
 
+load_dotenv(dotenv_path='.env')
+
 app = Flask(__name__)
-app.debug = True
+app.debug = getenv("DEBUG") == "True"
 app.register_blueprint(user_server, url_prefix = "/user")
 app.register_blueprint(medical_server, url_prefix = "/medical")
-app.secret_key = os.urandom(16)
+app.secret_key = urandom(16)
 
 class CalendarManager:
     __instance = None
