@@ -151,13 +151,13 @@ def updateTiming():
         return "-2" #->"Autenticazione fallita"
 
 
-""" Parametri da passare al metodo resetPassword: CF """
+""" Parametri da passare al metodo resetPassword: id o medName (username) """
 @medical_server.route("/passreset", methods = ["POST"])
 def resetPassword():
     import smtplib
     from smtplib import SMTPException
 
-    medical = med.Medicalcenter(int(request.json["id"]))
+    medical = med.Medicalcenter(request.json["username"])
     medicalData = medical.getMedicalcenter()
     if medicalData != False:
         newPass = token_generator(20)

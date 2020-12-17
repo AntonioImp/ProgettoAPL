@@ -137,13 +137,13 @@ def updatePassword():
         return "-2" #->"Autenticazione fallita"
     
 
-""" Parametri da passare al metodo resetPassword: CF """
+""" Parametri da passare al metodo resetPassword: CF(username) """
 @user_server.route("/passreset", methods = ["POST"])
 def resetPassword():
     import smtplib
     from smtplib import SMTPException
 
-    user = u.User(request.json["CF"])
+    user = u.User(request.json["username"])
     userData = user.getUser()
     if userData != False:
         newPass = token_generator(20)
