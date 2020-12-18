@@ -10,7 +10,6 @@ import shelve
 import datetime
 
 load_dotenv(dotenv_path='.env')
-
 app = Flask(__name__)
 app.debug = getenv("DEBUG") == "True"
 app.register_blueprint(user_server, url_prefix = "/user")

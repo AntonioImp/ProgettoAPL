@@ -261,8 +261,7 @@ def getDocAssignment():
                 if cr["CF"] == d["CF"]:
                     cr["day"].append(d["day"])
         json = {}
-        for i, r in enumerate(uniqueCopyRes):
-            json[i] = r
+        json["DocAssign"] = [r for r in uniqueCopyRes]
         return json
     else:
         return "-2" #->"Autenticazione fallita"
@@ -362,8 +361,12 @@ def insertExecution():
             return "-3" #->"Formato orario errato"
         if request.json["result"] != 'positivo' and request.json["result"] != 'negativo':
             return "-4" #->"Risultato non valido"
-        if med.Medicalcenter.insertExecution(request.json["id"], request.json["time"], request.json["result"]):
-            return "0" #->"Esecuzione inserita"
+        res = med.Medicalcenter.insertExecution(request.json["id"], request.json["time"], request.json["result"])
+        if res:
+            res["date"] = str(res["date"])
+            res["time"] = str(res["time"])
+            res["time_taken"] = str(res["time_taken"])
+            return res #->"Esecuzione inserita"
         else:
             return "-1" #->"Errore inserimento"
     else:

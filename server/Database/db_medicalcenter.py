@@ -54,7 +54,11 @@ def deleteMedicalcenter(medId):
 
 def insertExecutions(id, time_taken, result):
     query = "UPDATE booking SET time_taken = '" + time_taken + "', result = '" + result + "' WHERE practical_num = " + str(id)
-    return db.execute(query)
+    if db.execute(query):
+        query = "SELECT * FROM booking"
+        return db.fetch(query)
+    else:
+        return False
 
 if __name__ == "__main__":
     #print(getMedicalcenters())

@@ -74,7 +74,13 @@ class Medicalcenter:
 
     @staticmethod
     def insertExecution(id, time_taken, result):
-        return db_m.insertExecutions(id, time_taken, result)
+        res = db_m.insertExecutions(id, time_taken, result)
+        if res:
+            for booking in res:
+                if booking["practical_num"] == id:
+                    return booking
+        else:
+            return res
 
     """ return tuple -> (bool, bool, medical center id)"""
     def insertMedicalcenter(self):
