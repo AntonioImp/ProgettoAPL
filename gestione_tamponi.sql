@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 16, 2020 alle 15:59
+-- Creato il: Dic 18, 2020 alle 14:14
 -- Versione del server: 10.4.14-MariaDB
 -- Versione PHP: 7.4.11
 
@@ -44,7 +44,11 @@ CREATE TABLE `booking` (
 
 INSERT INTO `booking` (`practical_num`, `CF_U`, `ID_M`, `CF_M`, `date`, `time`, `time_taken`, `result`) VALUES
 (10, 'MPLNTN96S25F158E', 15, 'C', '2020-12-07', '08:33:00', '00:04:00', 'negativo'),
-(11, 'MPLNTN96S25F158E', 15, 'H', '2020-12-16', '08:40:00', NULL, NULL);
+(17, 'MPLNTN96S25F158E', 15, 'G', '2020-12-17', '08:30:00', '00:02:00', 'negativo'),
+(19, 'A', 15, 'A', '2020-12-17', '08:40:00', '00:06:00', 'negativo'),
+(20, 'B', 15, 'B', '2020-12-17', '08:40:00', '00:05:00', 'negativo'),
+(30, 'D', 15, 'E', '2020-12-17', '08:30:00', '00:03:00', 'negativo'),
+(31, 'MPLNTN96S25F158E', 15, 'A', '2020-12-18', '08:30:00', '00:45:00', 'negativo');
 
 -- --------------------------------------------------------
 
@@ -88,13 +92,13 @@ CREATE TABLE `docs` (
 --
 
 INSERT INTO `docs` (`CF`, `name`, `surname`, `phone`, `mail`, `avarage_time`) VALUES
-('A', 'A', 'A', 'A', 'A', NULL),
-('B', 'B', 'B', 'B', 'B', NULL),
-('C', 'C', 'C', 'C', 'C', '00:03:00'),
-('D', 'D', 'D', 'D', 'D', NULL),
-('E', 'E', 'E', 'E', 'E', NULL),
+('A', 'A', 'A', 'A', 'A', '00:06:00'),
+('B', 'B', 'B', 'B', 'B', '00:05:00'),
+('C', 'C', 'C', 'C', 'C', '00:04:00'),
+('D', 'D', 'D', 'D', 'D', '00:03:00'),
+('E', 'E', 'E', 'E', 'E', '00:03:00'),
 ('F', 'F', 'F', 'F', 'F', NULL),
-('G', 'G', 'G', 'G', 'G', NULL),
+('G', 'G', 'G', 'G', 'G', '00:02:00'),
 ('H', 'H', 'H', 'H', 'H', NULL),
 ('I', 'I', 'I', 'I', 'I', NULL);
 
@@ -106,7 +110,7 @@ INSERT INTO `docs` (`CF`, `name`, `surname`, `phone`, `mail`, `avarage_time`) VA
 
 CREATE TABLE `docs_list` (
   `CF` varchar(16) NOT NULL,
-  `day` enum('lunedì','martedì','mercoledì','giovedì','venerdì','sabato') NOT NULL,
+  `day` enum('lun','mar','mer','gio','ven','sab') NOT NULL,
   `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -115,22 +119,36 @@ CREATE TABLE `docs_list` (
 --
 
 INSERT INTO `docs_list` (`CF`, `day`, `id`) VALUES
-('A', 'lunedì', 12),
-('B', 'lunedì', 10),
-('C', 'lunedì', 15),
-('D', 'lunedì', 12),
-('E', 'lunedì', 12),
-('F', 'lunedì', 10),
-('G', 'lunedì', 15),
-('G', 'giovedì', 15),
-('H', 'lunedì', 15),
-('H', 'martedì', 15),
-('H', 'mercoledì', 15),
-('H', 'giovedì', 10),
-('H', 'sabato', 15),
-('I', 'martedì', 15),
-('I', 'mercoledì', 15),
-('I', 'giovedì', 15);
+('A', 'lun', 15),
+('A', 'mar', 15),
+('A', 'mer', 15),
+('A', 'gio', 15),
+('A', 'ven', 15),
+('B', 'lun', 15),
+('B', 'mar', 15),
+('B', 'mer', 15),
+('B', 'gio', 15),
+('B', 'ven', 15),
+('C', 'lun', 15),
+('C', 'mar', 15),
+('C', 'mer', 15),
+('C', 'gio', 15),
+('C', 'ven', 15),
+('D', 'lun', 15),
+('D', 'mar', 15),
+('D', 'mer', 15),
+('D', 'gio', 15),
+('D', 'ven', 15),
+('E', 'lun', 15),
+('E', 'mar', 15),
+('E', 'mer', 15),
+('E', 'gio', 15),
+('E', 'ven', 15),
+('G', 'lun', 15),
+('G', 'mar', 15),
+('G', 'mer', 15),
+('G', 'gio', 15),
+('G', 'ven', 15);
 
 -- --------------------------------------------------------
 
@@ -282,7 +300,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT per la tabella `medical_centers`
