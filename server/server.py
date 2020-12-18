@@ -3,6 +3,7 @@ from user_server import user_server
 from medical_server import medical_server
 from dotenv import load_dotenv
 from os import getenv, urandom
+from rpy2 import robjects as ro
 import Class.medicalcenter as m
 import Class.myCalendar as c
 import Class.doc as d
@@ -73,6 +74,9 @@ def setDay():
         dt = datetime.datetime.strptime(request.json["day"], date_f)
     except:
         return "-1" #->"Datetime format error"
+
+    ro.r.source("script.R")
+    
     manager = CalendarManager.getInstance()
     manager.setDate(dt.date())
     manager.initCalendarDict()
@@ -86,6 +90,7 @@ def setDay():
     if flag != None:
         for f in flag:
             d.Doc(f[0]).dismissDoc(f[1], manager.getDate()) #->"Elimino dottori che hanno completato la prenotazione e dovevano essere dimessi"
+
     return "0" #->"Giorno aggiornato"
 
 @app.route("/getday")

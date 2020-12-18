@@ -11,24 +11,23 @@ class MyCalendar:
     composto da giorno di riferimento come key e lista di orari per quel giorno come valori. """
 
     giorni_settimana = {
-        0: "lunedì",
-        1: "martedí",
-        2: "mercoledí",
-        3: "giovedì",
-        4: "venerdì",
-        5: "sabato",
-        6: "domenica"
+        0: "lun",
+        1: "mar",
+        2: "mer",
+        3: "gio",
+        4: "ven",
+        5: "sab",
+        6: "dom"
     }
     
     def __init__(self, medId, day):
         giorno = self.giorni_settimana[calendar.weekday(day.year, day.month, day.day)]
-        if(giorno == "domenica"):
+        if(giorno == "dom"):
             raise Exception("Domenica non vengono effettuati tamponi!")
         results = db_c.startCalendar(medId, giorno)
         self.medicalcenter = results[0]
         interval = results[1]
         docs = results[2]
-        
         for doc in docs:
             if doc not in interval:
                 interval[doc] = self.medicalcenter["default_interval"]
