@@ -4,6 +4,7 @@ import string
 import datetime
 import Class.user as u
 import Class.medicalcenter as m
+import Class.booking as b
 import shelve
 
 user_server = Blueprint("user_server", __name__, static_folder = "static")
@@ -259,13 +260,6 @@ def setBooking():
         except:
             return "-1" #->"Datetime format error"
         
-        user = u.User(session[token])
-        booked = user.getBooked()
-        for b in booked:
-            if b["date"] == manager.getDate():
-                return "-6" #->"L'utente ha già una prenotazione per questo giorno"
-        del booked
-
         booking = {
             "CF": session[token],
             "id": int(request.json["id"]),
@@ -273,13 +267,16 @@ def setBooking():
             "date": manager.getDate(),
             "time": dt.time()
         }
+        
         try:
             if not manager.removeBooked(int(request.json["id"]), dt, request.json["CF_M"]):
                 return "-3" #->"Errore aggiornamento calendario"
         except KeyError as e:
             return "-3" #->"CF doc errato"
-        res = user.insertBooking(booking)
-        if res["ins"]:
+        res = b.Booked(booking).insertBooking()
+        if res == -1:
+            return "-6" #->"L'utente ha già una prenotazione per questo giorno"
+        elif res["ins"]:
             with shelve.open('archive') as archive:
                 archive['manager'] = manager
                 archive.close()
@@ -301,8 +298,9 @@ def setBooking():
 def getBooked():
     token = request.json["token"]
     if token in session:
-        user = u.User(session[token])
-        res = user.getBookedComplete()
+        # user = u.User(session[token])
+        # res = user.getBookedComplete()
+        res = b.Booking(session[token]).getBookedComplete("user")
         json = {}
         complete = []
         if res["complete"]:
@@ -329,18 +327,19 @@ def getBooked():
 def deleteBooked():
     token = request.json["token"]
     if token in session:
-        user = u.User(session[token])
-        res = user.deleteBooked(int(request.json["id"]))
+        # user = u.User(session[token])
+        # res = user.deleteBooked(int(request.json["id"]))
+        res = b.Booking(session[token]).deleteBooked(int(request.json["id"]))
         if res == None:
             return "-1" #->"Prenotazione non trovata"
         elif res:
             with shelve.open("archive") as archive:
                 manager = archive["manager"]
                 if res["date"] == manager.getDate():
-                    res = manager.getCalendarDict()[res["ID_M"]].reinsertBooked(turn=res["time"],doc=res["CF_M"])
+                    manager.getCalendarDict()[res["ID_M"]].reinsertBooked(turn=res["time"],doc=res["CF_M"])
                     archive["manager"] = manager
                 archive.close()
-            return "0" #->"Prenotazione eliminata"
+            return res #->"Prenotazione eliminata"
         else:
             return "-3" #->"Errore nell'eliminazione, il tampone potrebbe già essere stato eseguito"
     else:

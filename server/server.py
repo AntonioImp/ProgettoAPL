@@ -6,6 +6,7 @@ from os import getenv, urandom
 from rpy2 import robjects as ro
 import Class.medicalcenter as m
 import Class.myCalendar as c
+import Class.booking as b
 import Class.doc as d
 import shelve
 import datetime
@@ -97,6 +98,12 @@ def setDay():
 def getDay():
     return str(CalendarManager.getInstance().getDate())
 
+@app.route("/getAllBooked")
+def getAllBooked():
+    res = b.Booking().getAllBooked()
+    json = {}
+    json["booked"] = [r for r in res]
+    return json
 
 if __name__ == "__main__":
     manager = CalendarManager.getInstance()

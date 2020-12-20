@@ -100,7 +100,6 @@ class MyCalendar:
             return False
 
 
-
 if __name__ == "__main__":
     cal = MyCalendar(15, datetime.date(2020,12,14))
     #print(cal.removeBooked('08:30:00', 'C'))
