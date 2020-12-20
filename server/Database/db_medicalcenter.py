@@ -19,10 +19,6 @@ def getPassword(medId):
     query = "SELECT password FROM medical_center_credentials WHERE id = " + str(medId)
     return db.fetch(query)
 
-# def getBooked(medId):
-#     query = "SELECT * FROM booking WHERE ID_M = " + str(medId)
-#     return db.fetch(query)
-
 def insertMedicalcenter(mc, password):
     query = "INSERT INTO medical_centers(medical_name, p_IVA, phone, mail, CAP, city, street, n_cv)"
     query += " VALUES ('" + mc["medName"] + "','" + mc["p_IVA"] + "', '" + mc["phone"] + "', '" + mc["mail"]
@@ -51,14 +47,6 @@ def updateTiming(medId, start_time, end_time, default_interval):
 def deleteMedicalcenter(medId):
     query = "DELETE FROM medical_centers WHERE id = " + str(medId)
     return db.execute(query)
-
-# def insertExecutions(id, time_taken, result):
-#     query = "UPDATE booking SET time_taken = '" + time_taken + "', result = '" + result + "' WHERE practical_num = " + str(id)
-#     if db.execute(query):
-#         query = "SELECT * FROM booking"
-#         return db.fetch(query)
-#     else:
-#         return False
 
 if __name__ == "__main__":
     #print(getMedicalcenters())

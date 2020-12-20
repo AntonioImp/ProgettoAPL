@@ -41,46 +41,6 @@ class Medicalcenter:
             return self.password
         else:
             return False
-    
-    # def getBooked(self):
-    #     if self.medicalcenter != ():
-    #         booked = db_m.getBooked(self.medicalcenter["id"])
-    #         res = {}
-    #         if booked == ():
-    #             res["complete"] = False
-    #             res["incomplete"] = False
-    #         else:
-    #             incomplete = booked[:]
-    #             complete = booked[:]
-    #             indexesI = []
-    #             indexesC = []
-    #             for i, b in enumerate(booked):
-    #                 if b['result'] != None:
-    #                     indexesI.append(i)
-    #                 else:
-    #                     indexesC.append(i)
-    #             for i in sorted(indexesI, reverse=True):
-    #                 del incomplete[i] 
-    #             for i in sorted(indexesC, reverse=True):
-    #                 del complete[i]
-    #             for i in incomplete:
-    #                 del i["time_taken"]
-    #                 del i["result"]
-    #             res["complete"] = complete
-    #             res["incomplete"] = incomplete
-    #         return res
-    #     else:
-    #         return False
-
-    # @staticmethod
-    # def insertExecution(id, time_taken, result):
-    #     res = db_m.insertExecutions(id, time_taken, result)
-    #     if res:
-    #         for booking in res:
-    #             if booking["practical_num"] == id:
-    #                 return booking
-    #     else:
-    #         return res
 
     """ return tuple -> (bool, bool, medical center id)"""
     def insertMedicalcenter(self):

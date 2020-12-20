@@ -327,8 +327,6 @@ def dismissDoc():
 def getBooked():
     token = request.json["token"]
     if token in session:
-        # medical = med.Medicalcenter(session[token])
-        # res = medical.getBooked()
         res = b.Booking(session[token]).getBookedComplete("medical")
         json = {}
         complete = []
