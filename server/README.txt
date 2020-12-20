@@ -1,3 +1,3 @@
 installare: 
     Python -> pymysql, flask, shelve, python-dotenv
-    R -> RMariaDB, dotenv, openair
+    R versione 4.0.3 -> RMariaDB, dotenv, openair
