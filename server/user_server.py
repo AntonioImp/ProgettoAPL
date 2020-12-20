@@ -273,7 +273,7 @@ def setBooking():
                 return "-3" #->"Errore aggiornamento calendario"
         except KeyError as e:
             return "-3" #->"CF doc errato"
-        res = b.Booked(booking).insertBooking()
+        res = b.Booking(booking).insertBooking()
         if res == -1:
             return "-6" #->"L'utente ha già una prenotazione per questo giorno"
         elif res["ins"]:
@@ -339,6 +339,9 @@ def deleteBooked():
                     manager.getCalendarDict()[res["ID_M"]].reinsertBooked(turn=res["time"],doc=res["CF_M"])
                     archive["manager"] = manager
                 archive.close()
+            res["time"] = str(res["time"])
+            res["time_taken"] = str(res["time_taken"])
+            res["date"] = str(res["date"])
             return res #->"Prenotazione eliminata"
         else:
             return "-3" #->"Errore nell'eliminazione, il tampone potrebbe già essere stato eseguito"

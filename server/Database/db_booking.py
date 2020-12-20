@@ -23,3 +23,7 @@ def insertBooking(booking):
     res["ins"] = db.execute(query)
     res["lastId"] = db.lastInsertId()
     return res
+
+def deleteBooked(practical_num):
+    query = "DELETE FROM booking WHERE practical_num = " + str(practical_num)
+    return db.execute(query)
