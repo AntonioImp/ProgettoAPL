@@ -102,7 +102,11 @@ def getDay():
 def getAllBooked():
     res = b.Booking.getAllBooked()
     json = {}
-    json["booked"] = [r for r in res]
+    json["booked"] = []
+    for r in res:
+        r["time_taken"] = str(r["time_taken"])
+        r["date"] = str(r["date"])
+        json["booked"] += [r,]
     return json
 
 if __name__ == "__main__":
