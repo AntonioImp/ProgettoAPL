@@ -59,7 +59,7 @@ class Booking:
     def getAllBooked():
         res = db_b.getAllBooked()
         if res:
-            copyRes = [{"date": b["date"], "time_taken": b["time_taken"], "result": b["result"]} for b in res]
+            copyRes = [{"date": b["date"], "time_taken": b["time_taken"], "result": b["result"], "ID_M": b["ID_M"]} for b in res]
             return copyRes
         else:
             return False
