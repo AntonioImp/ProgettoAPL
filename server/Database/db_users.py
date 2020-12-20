@@ -40,21 +40,3 @@ def updatePassword(CF, password):
 def deleteUser(CF):
     query = "DELETE FROM users WHERE CF = '" + CF + "'"
     return db.execute(query)
-
-
-"""  --- BOOKING OP ---  """
-def insertBooking(booking):
-    query = "INSERT INTO booking(CF_U, ID_M, CF_M, date, time) VALUES ('" + booking["CF"]
-    query += "', " + str(booking["id"]) + ", '" + booking["CF_M"] + "', '" + str(booking["date"]) + "', '" + str(booking["time"]) + "')"
-    res = {}
-    res["ins"] = db.execute(query)
-    res["lastId"] = db.lastInsertId()
-    return res
-
-def getBooked(CF):
-    query = "SELECT * FROM booking WHERE CF_U = '" + CF + "'"
-    return db.fetch(query)
-
-def deleteBooked(practical_num):
-    query = "DELETE FROM booking WHERE practical_num = " + str(practical_num)
-    return db.execute(query)

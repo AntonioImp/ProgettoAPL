@@ -4,6 +4,7 @@ import string
 import datetime
 import Class.medicalcenter as med
 import Class.doc as doc
+import Class.booking as b
 import shelve
 
 medical_server = Blueprint("medical_server", __name__, static_folder = "static")
@@ -326,8 +327,9 @@ def dismissDoc():
 def getBooked():
     token = request.json["token"]
     if token in session:
-        medical = med.Medicalcenter(session[token])
-        res = medical.getBooked()
+        # medical = med.Medicalcenter(session[token])
+        # res = medical.getBooked()
+        res = b.Booking(session[token]).getBookedComplete("medical")
         json = {}
         complete = []
         if res["complete"]:
@@ -361,7 +363,7 @@ def insertExecution():
             return "-3" #->"Formato orario errato"
         if request.json["result"] != 'positivo' and request.json["result"] != 'negativo':
             return "-4" #->"Risultato non valido"
-        res = med.Medicalcenter.insertExecution(request.json["id"], request.json["time"], request.json["result"])
+        res = b.Booking.insertExecution(request.json["id"], request.json["time"], request.json["result"])
         if res:
             res["date"] = str(res["date"])
             res["time"] = str(res["time"])

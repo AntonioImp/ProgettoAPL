@@ -13,7 +13,7 @@ def getBooked(entity, name):
     if entity == "user":
         query = "SELECT * FROM booking WHERE CF_U = '" + name + "'"
     elif entity == "medical":
-        query = "SELECT * FROM booking WHERE ID_M = '" + name + "'"
+        query = "SELECT * FROM booking WHERE ID_M = " + name
     return db.fetch(query)
 
 def insertBooking(booking):
@@ -23,6 +23,14 @@ def insertBooking(booking):
     res["ins"] = db.execute(query)
     res["lastId"] = db.lastInsertId()
     return res
+
+def insertExecutions(id, time_taken, result):
+    query = "UPDATE booking SET time_taken = '" + time_taken + "', result = '" + result + "' WHERE practical_num = " + str(id)
+    if db.execute(query):
+        query = "SELECT * FROM booking"
+        return db.fetch(query)
+    else:
+        return False
 
 def deleteBooked(practical_num):
     query = "DELETE FROM booking WHERE practical_num = " + str(practical_num)

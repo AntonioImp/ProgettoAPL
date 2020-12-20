@@ -17,10 +17,10 @@ class Booking:
     def __init__(self, booking):
         self.booking = ()
         self.name_booking = ""
-        self.id_booking = -1
+        self.id_med = -1
 
         if type(booking) == int:
-            self.id_booking = booking
+            self.id_med = booking
         elif type(booking) == str:
             self.name_booking = booking
         else:
@@ -36,10 +36,22 @@ class Booking:
             return db_b.insertBooking(self.booking)
         else:
             return False
+    
+    @staticmethod
+    def insertExecution(id, time_taken, result):
+        res = db_b.insertExecutions(id, time_taken, result)
+        if res:
+            for booking in res:
+                if booking["practical_num"] == id:
+                    return booking
+        else:
+            return res
 
     def getBooked(self, entity):
         if self.name_booking != "":
             return db_b.getBooked(entity, self.name_booking)
+        elif self.id_med != -1:
+            return db_b.getBooked(entity, self.id_med)
         else:
             return False
     
@@ -53,8 +65,11 @@ class Booking:
             return False
     
     def getBookedComplete(self, entity):
-        if self.name_booking != "":
-            booked = db_b.getBooked(entity, self.name_booking)
+        if (entity == "user" and self.name_booking != "") or (entity == "medical" and self.id_med != -1):
+            if self.name_booking != "":
+                booked = db_b.getBooked(entity, self.name_booking)
+            else:
+                booked = db_b.getBooked(entity, self.id_med)
             res = {}
             if booked == ():
                 res["complete"] = False

@@ -298,8 +298,6 @@ def setBooking():
 def getBooked():
     token = request.json["token"]
     if token in session:
-        # user = u.User(session[token])
-        # res = user.getBookedComplete()
         res = b.Booking(session[token]).getBookedComplete("user")
         json = {}
         complete = []
@@ -327,8 +325,6 @@ def getBooked():
 def deleteBooked():
     token = request.json["token"]
     if token in session:
-        # user = u.User(session[token])
-        # res = user.deleteBooked(int(request.json["id"]))
         res = b.Booking(session[token]).deleteBooked(int(request.json["id"]))
         if res == None:
             return "-1" #->"Prenotazione non trovata"
