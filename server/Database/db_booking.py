@@ -13,7 +13,7 @@ def getBooked(entity, name):
     if entity == "user":
         query = "SELECT * FROM booking WHERE CF_U = '" + name + "'"
     elif entity == "medical":
-        query = "SELECT * FROM booking WHERE ID_M = " + name
+        query = "SELECT * FROM booking WHERE ID_M = " + str(name)
     return db.fetch(query)
 
 def insertBooking(booking):
