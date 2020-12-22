@@ -6,7 +6,7 @@ import Database.db_medicalcenter as db_m
 
 class Medicalcenter:
     """Constructor medicalcenter class accepts a dictionary with template (first parameter) as:
-    {"medName": "",
+    {"medical_name": "",
     "p_IVA": "",
     "phone": "",
     "mail": "",

@@ -24,8 +24,8 @@ def token_generator(size):
 """ Parametri da passare al metodo login: username, password"""
 @medical_server.route("/login", methods = ["POST"])
 def login():
-    medName = request.json["username"]
-    medical = med.Medicalcenter(medName)
+    medical_name = request.json["username"]
+    medical = med.Medicalcenter(medical_name)
     if medical.getMedicalcenter() != False and request.json["pass"] == medical.getPassword():
         try:
             medId = medical.getMedicalcenter()["id"]
@@ -62,7 +62,7 @@ def login():
 @medical_server.route("/signup", methods = ["POST"])
 def signup():
     medicalData = {
-        "medical_name": request.json["medName"],
+        "medical_name": request.json["medical_name"],
         "p_IVA": request.json["p_IVA"],
         "phone": request.json["phone"],
         "mail": request.json["mail"],
@@ -98,7 +98,7 @@ def updateMedicalcenter():
     if token in session:
         medId = session[token]
         medicalData = {
-            "medical_name": request.json["medName"],
+            "medical_name": request.json["medical_name"],
             "p_IVA": request.json["p_IVA"],
             "phone": request.json["phone"],
             "mail": request.json["mail"],
@@ -152,7 +152,7 @@ def updateTiming():
         return "-2" #->"Autenticazione fallita"
 
 
-""" Parametri da passare al metodo resetPassword: id o medName (username) """
+""" Parametri da passare al metodo resetPassword: id o medical_name (username) """
 @medical_server.route("/passreset", methods = ["POST"])
 def resetPassword():
     import smtplib
