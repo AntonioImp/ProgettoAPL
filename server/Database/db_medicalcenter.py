@@ -5,48 +5,55 @@ import Database.db_access as db_access
 
 db = db_access.DBHelper()
 
+# #select(["name", "ID_M"], "booking", [("CF", "==", CF), ("name", "!=", name)], ["AND", ""])
+# #insert({"name": "CF", "ID_M": "name"}, "booking", False)
+# #update({"name": "CF", "ID_M": "name"}, "booking", [("id", "=", "A")], [""], False)
+# #delete("medical_centers", [("id", "=", medId)], [""], False)
+
 def getMedicalcenters():
-    return db.fetch("SELECT id, medical_name, phone, mail, CAP, city, street, n_cv FROM medical_centers")
+    func = db.select(["id", "medical_name", "phone", "mail", "CAP", "city", "street", "n_cv"], "medical_centers", [], [""])
+    return func()
 
 def getMedicalcenter(med):
     if type(med) == str:
-        query = "SELECT * FROM medical_centers WHERE medical_name = '" + str(med) + "'"
+        func = db.select([], "medical_centers", [("medical_name", "=", str(med))], [""])
     else:
-        query = "SELECT * FROM medical_centers WHERE id = " + str(med)
-    return db.fetch(query)
+        func = db.select([], "medical_centers", [("id", "=", str(med))], [""])
+    return func()
 
 def getPassword(medId):
-    query = "SELECT password FROM medical_center_credentials WHERE id = " + str(medId)
-    return db.fetch(query)
+    func = db.select(["password"], "medical_center_credentials", [("id", "=", str(medId))], [""])
+    return func()
 
 def insertMedicalcenter(mc, password):
-    query = "INSERT INTO medical_centers(medical_name, p_IVA, phone, mail, CAP, city, street, n_cv)"
-    query += " VALUES ('" + mc["medName"] + "','" + mc["p_IVA"] + "', '" + mc["phone"] + "', '" + mc["mail"]
-    query += "', '" + mc["CAP"] + "', '" + mc["city"] + "', '" + mc["street"] + "', " + str(mc["n_cv"]) + ")"
-    res = (db.execute(query),)
+    func = db.insert(mc, "medical_centers", False)
+    res = (func(),)
     lastId = db.lastInsertId()
-    query2 = "INSERT INTO medical_center_credentials(id, password) VALUES ( " + str(lastId) + ", '" + password + "' )"
-    res += (db.execute(query2), lastId)
+    credential = {"id": lastId, "password": password}
+    func = db.insert(credential, "medical_center_credentials", False)
+    res += (func(), lastId)
     return res
 
 def updateMedicalcenter(medId, mc):
-    query = "UPDATE medical_centers SET p_IVA='" + mc["p_IVA"] + "',phone='" + mc["phone"] + "',mail='" + mc["mail"]
-    query += "',CAP='" + mc["CAP"] + "',city='" + mc["city"] + "',street='" + mc["street"] + "',n_cv='" + str(mc["n_cv"]) 
-    query += "' WHERE id = " + str(medId)
-    return db.execute(query)
+    func = db.update(mc, "medical_centers", [("id", "=", medId)], [""], False)
+    return func()
 
 def updatePassword(medId, password):
-    query = "UPDATE medical_center_credentials SET password='" + password + "' WHERE id=" + str(medId)
-    return db.execute(query)
+    func = db.update({"password": password}, "medical_center_credentials", [("id", "=", medId)], [""], False)
+    return func()
 
 def updateTiming(medId, start_time, end_time, default_interval):
-    query = "UPDATE medical_centers SET start_time='" + str(start_time) + "', end_time='" + str(end_time) + "', default_interval='" 
-    query += str(default_interval) + "' WHERE id=" + str(medId)
-    return db.execute(query)
+    data = {
+        "start_time": start_time,
+        "end_time": end_time,
+        "default_interval": default_interval
+    }
+    func = db.update(data, "medical_centers", [("id", "=", medId)], [""], False)
+    return func()
 
 def deleteMedicalcenter(medId):
-    query = "DELETE FROM medical_centers WHERE id = " + str(medId)
-    return db.execute(query)
+    func = db.delete("medical_centers", [("id", "=", medId)], [""], False)
+    return func()
 
 if __name__ == "__main__":
     #print(getMedicalcenters())

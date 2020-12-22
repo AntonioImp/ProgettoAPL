@@ -62,7 +62,7 @@ def login():
 @medical_server.route("/signup", methods = ["POST"])
 def signup():
     medicalData = {
-        "medName": request.json["medName"],
+        "medical_name": request.json["medName"],
         "p_IVA": request.json["p_IVA"],
         "phone": request.json["phone"],
         "mail": request.json["mail"],
@@ -98,7 +98,7 @@ def updateMedicalcenter():
     if token in session:
         medId = session[token]
         medicalData = {
-            "medName": request.json["medName"],
+            "medical_name": request.json["medName"],
             "p_IVA": request.json["p_IVA"],
             "phone": request.json["phone"],
             "mail": request.json["mail"],

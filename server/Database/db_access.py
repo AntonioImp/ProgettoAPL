@@ -71,3 +71,78 @@ class DBHelper:
             print(arg)
             self.con.rollback()
             return False
+
+    #func = select(["name", "ID_M"], "booking", [("CF", "==", CF), ("name", "!=", name)], ["AND", ""])
+    def select(self, param, table, filt, logic):
+        def query():
+            query = "SELECT "
+            if len(param) == 0:
+                query += "*"
+            else:
+                query += str(param.pop(0))
+                for p in param:
+                    query += ", " + str(p)
+            query += " FROM " + table
+            if len(filt) != 0:
+                query += " WHERE "
+                for i, f in enumerate(filt):
+                    query += str(f[0]) + " " + str(f[1]) + " '" + str(f[2]) + "'"
+                    if logic[i] != "":
+                        query += " " + str(logic[i]) + " "
+            print(query)
+            return self.fetch(query)
+        return query
+
+    #insert({"name": "CF", "ID_M": "name"}, "booking", False)
+    def insert(self, data, table, trans):
+        key = list(data.keys())
+        val = list(data.values())
+        def query():
+            query = "INSERT INTO " + table + "(" + str(key.pop(0))
+            for k in key:
+                query += ", " + str(k)
+            query += ") VALUES ('" + str(val.pop(0))
+            for v in val:
+                query += "', '" + str(v)
+            query += "')"
+            print(query)
+            if trans:
+                return self.transactionQuery(query)
+            else:
+                return self.execute(query)
+        return query
+    
+    #update({"name": "CF", "ID_M": "name"}, "booking", [("id", "=", "A")], [""], False)
+    def update(self, data, table, filt, logic, trans):
+        item = list(data.items())
+        def query():
+            query = "UPDATE " + table + " SET " + str(item[0][0]) + "='" + str(item[0][1])
+            del item[0]
+            for i in item:
+                query += "', " + str(i[0]) + "='" + str(i[1])
+            query += "' WHERE "
+            for i, f in enumerate(filt):
+                query += str(f[0]) + " " + str(f[1]) + " " + str(f[2])
+                if logic[i] != "":
+                    query += " " + str(logic[i]) + " "
+            print(query)
+            if trans:
+                return self.transactionQuery(query)
+            else:
+                return self.execute(query)
+        return query
+    
+    #delete("booking", [("id", "=", "A")], [""], False)
+    def delete(self, table, filt, logic, trans):
+        def query():
+            query = "DELETE FROM " + table + " WHERE "
+            for i, f in enumerate(filt):
+                query += str(f[0]) + " " + str(f[1]) + " " + str(f[2])
+                if logic[i] != "":
+                    query += " " + str(logic[i]) + " "
+            print(query)
+            if trans:
+                return self.transactionQuery(query)
+            else:
+                return self.execute(query)
+        return query
