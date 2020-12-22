@@ -8,35 +8,33 @@ db = db_access.DBHelper()
 
 """  --- CRUD OP ---  """
 def getUsers():
-    return db.fetch("select * from users")
+    func = db.select([], "users", [], [""])
+    return func()
 
 def getUser(CF):
-    query = "select * from users where CF = '" + CF + "'"
-    return db.fetch(query)
+    func = db.select([], "users", [("CF", "=", CF)], [""])
+    return func()
 
 def getPassword(CF):
-    query = "select password from credentials where username = '" + CF + "'"
-    return db.fetch(query)
+    func = db.select(["password"], "credentials", [("username", "=", CF)], [""])
+    return func()
 
 def insertUser(user, password):
-    query = "INSERT INTO users(CF, name, surname, phone, mail, age, CAP, city, street, n_cv)"
-    query += " VALUES ('" + user["CF"] + "','" + user["name"] + "','" + user["surname"] + "','" + user["phone"]
-    query += "','" + user["mail"] + "'," + str(user["age"]) + ",'" + user["CAP"] + "','" + user["city"] + "','"
-    query += user["street"] + "'," + str(user["n_cv"]) + ")"
-    query2 = "INSERT INTO credentials(username, password) VALUES ('" + user["CF"] + "', '" + password + "')"
-    return db.execute(query), db.execute(query2)
+    func = db.insert(user, "users", False)
+    res1 = func()
+    credential = {"username": user["CF"], "password": password}
+    func = db.insert(credential, "credentials", False)
+    res2 = func()
+    return res1, res2
 
 def updateUser(CF, user):
-    query = "UPDATE users SET CF = '" + user["CF"] + "', name = '" + user["name"] + "', surname = '" + user["surname"]
-    query += "', phone = '" + user["phone"] + "', mail = '" + user["mail"] + "', age = '" + str(user["age"]) + "', CAP = '"
-    query += user["CAP"] + "', city = '" + user["city"] + "', street = '" + user["street"]
-    query += "', n_cv = '" + str(user["n_cv"]) + "' WHERE CF = '" + CF + "'"
-    return db.execute(query)
+    func = db.update(user,"users", [("CF", "=", CF)], [""], False)
+    return func()
 
 def updatePassword(CF, password):
-    query = "UPDATE credentials SET password='" + password + "' WHERE username = '" + CF + "'"
-    return db.execute(query)
+    func = db.update({"password": password}, "credentials", [("username", "=", CF)], [""], False)
+    return func()
 
 def deleteUser(CF):
-    query = "DELETE FROM users WHERE CF = '" + CF + "'"
-    return db.execute(query)
+    func = db.delete("users", [("CF", "=", CF)], [""], False)
+    return func()

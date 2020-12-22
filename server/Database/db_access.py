@@ -122,7 +122,7 @@ class DBHelper:
                 query += "', " + str(i[0]) + "='" + str(i[1])
             query += "' WHERE "
             for i, f in enumerate(filt):
-                query += str(f[0]) + " " + str(f[1]) + " " + str(f[2])
+                query += str(f[0]) + " " + str(f[1]) + " '" + str(f[2]) + "'"
                 if logic[i] != "":
                     query += " " + str(logic[i]) + " "
             print(query)
@@ -137,7 +137,7 @@ class DBHelper:
         def queryGenerator():
             query = "DELETE FROM " + table + " WHERE "
             for i, f in enumerate(filt):
-                query += str(f[0]) + " " + str(f[1]) + " " + str(f[2])
+                query += str(f[0]) + " " + str(f[1]) + " '" + str(f[2]) + "'"
                 if logic[i] != "":
                     query += " " + str(logic[i]) + " "
             print(query)
