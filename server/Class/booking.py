@@ -41,9 +41,7 @@ class Booking:
     def insertExecution(id, time_taken, result):
         res = db_b.insertExecutions(id, time_taken, result)
         if res:
-            for booking in res:
-                if booking["practical_num"] == id:
-                    return booking
+            return res[0]
         else:
             return res
 

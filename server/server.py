@@ -121,5 +121,7 @@ if __name__ == "__main__":
     manager = CalendarManager.getInstance()
     with shelve.open('archive') as archive:
         archive['manager'] = manager
+        # for data in archive.keys():
+        #     print( data , archive[ data ])
         archive.close()
     app.run()

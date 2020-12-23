@@ -261,8 +261,8 @@ def setBooking():
             return "-1" #->"Datetime format error"
         
         booking = {
-            "CF": session[token],
-            "id": int(request.json["id"]),
+            "CF_U": session[token],
+            "ID_M": int(request.json["id"]),
             "CF_M": request.json["CF_M"],
             "date": manager.getDate(),
             "time": dt.time()
