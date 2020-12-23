@@ -227,11 +227,6 @@ def insertDoc():
             ret = "1" #->"Dottore già in DB. Aggiunto solo ai dipendenti del medical center"
         else:
             ret = "0" #->"Dottore inserito e assegnato"
-        with shelve.open('archive') as archive:
-            manager = archive['manager']
-            manager.initCalendarDict()
-            archive['manager'] = manager
-            archive.close()
         return ret
     else:
         return "-2" #->"Autenticazione fallita"

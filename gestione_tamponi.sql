@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 18, 2020 alle 14:14
+-- Creato il: Dic 23, 2020 alle 17:38
 -- Versione del server: 10.4.14-MariaDB
 -- Versione PHP: 7.4.11
 
@@ -48,7 +48,8 @@ INSERT INTO `booking` (`practical_num`, `CF_U`, `ID_M`, `CF_M`, `date`, `time`, 
 (19, 'A', 15, 'A', '2020-12-17', '08:40:00', '00:06:00', 'negativo'),
 (20, 'B', 15, 'B', '2020-12-17', '08:40:00', '00:05:00', 'negativo'),
 (30, 'D', 15, 'E', '2020-12-17', '08:30:00', '00:03:00', 'negativo'),
-(31, 'MPLNTN96S25F158E', 15, 'A', '2020-12-18', '08:30:00', '00:45:00', 'negativo');
+(31, 'MPLNTN96S25F158E', 15, 'A', '2020-12-18', '08:30:00', '00:45:00', 'negativo'),
+(35, 'MPLNTN96S25F158E', 15, 'A', '2020-12-21', '08:30:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -68,6 +69,7 @@ CREATE TABLE `credentials` (
 INSERT INTO `credentials` (`username`, `password`) VALUES
 ('A', 'A'),
 ('B', 'B'),
+('C', 'C'),
 ('D', 'D'),
 ('E', 'E'),
 ('MPLNTN96S25F158E', 'antonio');
@@ -92,7 +94,7 @@ CREATE TABLE `docs` (
 --
 
 INSERT INTO `docs` (`CF`, `name`, `surname`, `phone`, `mail`, `avarage_time`) VALUES
-('A', 'A', 'A', 'A', 'A', '00:06:00'),
+('A', 'A', 'A', 'A', 'A', '00:25:30'),
 ('B', 'B', 'B', 'B', 'B', '00:05:00'),
 ('C', 'C', 'C', 'C', 'C', '00:04:00'),
 ('D', 'D', 'D', 'D', 'D', '00:03:00'),
@@ -100,7 +102,8 @@ INSERT INTO `docs` (`CF`, `name`, `surname`, `phone`, `mail`, `avarage_time`) VA
 ('F', 'F', 'F', 'F', 'F', NULL),
 ('G', 'G', 'G', 'G', 'G', '00:02:00'),
 ('H', 'H', 'H', 'H', 'H', NULL),
-('I', 'I', 'I', 'I', 'I', NULL);
+('I', 'I', 'I', 'I', 'I', NULL),
+('L', 'H', 'H', 'L', 'H', NULL);
 
 -- --------------------------------------------------------
 
@@ -144,6 +147,7 @@ INSERT INTO `docs_list` (`CF`, `day`, `id`) VALUES
 ('E', 'mer', 15),
 ('E', 'gio', 15),
 ('E', 'ven', 15),
+('F', 'ven', 17),
 ('G', 'lun', 15),
 ('G', 'mar', 15),
 ('G', 'mer', 15),
@@ -177,10 +181,11 @@ CREATE TABLE `medical_centers` (
 
 INSERT INTO `medical_centers` (`id`, `medical_name`, `p_IVA`, `phone`, `mail`, `CAP`, `city`, `street`, `n_cv`, `start_time`, `end_time`, `default_interval`) VALUES
 (10, 'B', 'B', 'B', 'antonioimpala251196@gmail.com', 'B', 'B', 'B', 24, '08:00:00', '12:00:00', '00:10:00'),
-(12, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 24, '08:00:00', '12:00:00', '00:10:00'),
 (13, 'D', 'D', 'D', 'D', 'D', 'D', 'D', 24, '08:00:00', '12:00:00', '00:10:00'),
-(15, 'E', 'E', 'E', 'E', 'E', 'E', 'E', 24, '08:30:00', '12:00:00', '00:10:00'),
-(17, 'F', 'F', 'F', 'F', 'F', 'F', 'F', 24, '09:00:00', '11:00:00', '00:15:00');
+(15, 'H', 'H', 'H', 'H', 'H', 'H', 'H', 15, '07:30:00', '11:00:00', '00:05:00'),
+(17, 'F', 'F', 'F', 'F', 'F', 'F', 'F', 24, '09:00:00', '11:00:00', '00:15:00'),
+(18, 'A', 'A', 'A', 'A', 'A', 'A', 'A', 15, '08:00:00', '12:00:00', '00:10:00'),
+(19, 'G', 'G', 'G', 'G', 'G', 'G', 'G', 15, '08:00:00', '12:00:00', '00:10:00');
 
 -- --------------------------------------------------------
 
@@ -199,10 +204,11 @@ CREATE TABLE `medical_center_credentials` (
 
 INSERT INTO `medical_center_credentials` (`id`, `password`) VALUES
 (10, 'B'),
-(12, 'C'),
 (13, 'D'),
-(15, 'E'),
-(17, 'C');
+(15, 'H'),
+(17, 'F'),
+(18, 'A'),
+(19, 'G');
 
 -- --------------------------------------------------------
 
@@ -230,6 +236,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`CF`, `name`, `surname`, `phone`, `mail`, `age`, `CAP`, `city`, `street`, `n_cv`) VALUES
 ('A', 'A', 'A', 'A', 'A@ok', 25, 'A', 'A', 'A', 25),
 ('B', 'B', 'B', 'B', 'B@ok', 25, 'B', 'B', 'B', 25),
+('C', 'C', 'C', 'C', 'C', 25, 'C', 'C', 'C', 15),
 ('D', 'D', 'D', 'D', 'D@ok', 25, 'D', 'D', 'D', 25),
 ('E', 'E', 'E', 'E', 'E@ok', 25, 'E', 'E', 'E', 25),
 ('MPLNTN96S25F158E', 'Antonio', 'Impalà', '3453241991', 'antonioimpala251196@gmail.com', 23, '98045', 'San Pier Niceto', 'Via Dott. Sen. Pietro Pitrone', 134);
@@ -257,9 +264,7 @@ ALTER TABLE `credentials`
 -- Indici per le tabelle `docs`
 --
 ALTER TABLE `docs`
-  ADD PRIMARY KEY (`CF`),
-  ADD UNIQUE KEY `phone` (`phone`),
-  ADD UNIQUE KEY `mail` (`mail`);
+  ADD PRIMARY KEY (`CF`);
 
 --
 -- Indici per le tabelle `docs_list`
@@ -274,8 +279,6 @@ ALTER TABLE `docs_list`
 --
 ALTER TABLE `medical_centers`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `VAT_number` (`p_IVA`),
-  ADD UNIQUE KEY `phone` (`phone`),
   ADD UNIQUE KEY `medical_name` (`medical_name`);
 
 --
@@ -288,9 +291,7 @@ ALTER TABLE `medical_center_credentials`
 -- Indici per le tabelle `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`CF`),
-  ADD UNIQUE KEY `mail` (`mail`),
-  ADD UNIQUE KEY `mobile` (`phone`);
+  ADD PRIMARY KEY (`CF`);
 
 --
 -- AUTO_INCREMENT per le tabelle scaricate
@@ -300,13 +301,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `practical_num` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT per la tabella `medical_centers`
 --
 ALTER TABLE `medical_centers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Limiti per le tabelle scaricate

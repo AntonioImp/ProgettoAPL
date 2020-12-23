@@ -28,7 +28,7 @@ class Booking:
     
     def insertBooking(self):
         if self.booking != ():
-            booked = db_b.getBooked(entity="user", name=self.booking["CF"])
+            booked = db_b.getBooked(entity="user", name=self.booking["CF_U"])
             for b in booked:
                 if b["date"] == self.booking["date"]:
                     return -1
