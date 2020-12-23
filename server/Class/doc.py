@@ -26,8 +26,31 @@ class Doc:
             return False
     
     @staticmethod
-    def getDocAssignment(*data):
-        return db_d.getDocAssignment(data)
+    def getDocAssignment(medId):
+        lis, docs = db_d.getDocAssignment(medId)
+        union = []
+        for doc in docs:
+            for l in lis:
+                if l["CF"] == doc["CF"]:
+                    tmp = dict(doc.items())
+                    tmp.update(l)
+                    union.append(tmp)
+        del lis, docs
+        copyRes = [r.copy() for r in union]
+        for cr in copyRes:
+            del cr["day"]
+        uniqueCopyRes = []
+        for x in copyRes:
+            if x not in uniqueCopyRes:
+                uniqueCopyRes.append(x)
+        del copyRes
+        for cr in uniqueCopyRes:
+            cr["avarage_time"] = str(cr["avarage_time"])
+            cr["day"] = []
+            for d in union:
+                if cr["CF"] == d["CF"]:
+                    cr["day"].append(d["day"])
+        return uniqueCopyRes
         
     """ return tuple -> (bool insert docs, bool insert docs_list)
         or (bool insert docs_list,) if doc is already in docs table"""

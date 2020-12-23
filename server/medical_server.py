@@ -203,7 +203,7 @@ def delete():
             return "-2" #->"Password errata"
     else:
         return "-3" #->"Autenticazione fallita"
-    
+
 
 """ Parametri da passare al metodo insertDoc: token, dati doc """
 @medical_server.route("/insertdoc", methods = ["POST"])
@@ -248,21 +248,8 @@ def getDocAssignment():
     token = request.json["token"]
     if token in session:
         res = doc.Doc.getDocAssignment(session[token])
-        copyRes = [r.copy() for r in res]
-        for cr in copyRes:
-            del cr["day"]
-        uniqueCopyRes = []
-        for x in copyRes:
-            if x not in uniqueCopyRes:
-                uniqueCopyRes.append(x)
-        del copyRes
-        for cr in uniqueCopyRes:
-            cr["day"] = []
-            for d in res:
-                if cr["CF"] == d["CF"]:
-                    cr["day"].append(d["day"])
         json = {}
-        json["DocAssign"] = [r for r in uniqueCopyRes]
+        json["DocAssign"] = [r for r in res]
         return json
     else:
         return "-2" #->"Autenticazione fallita"

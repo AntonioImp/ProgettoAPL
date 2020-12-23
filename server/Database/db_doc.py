@@ -6,44 +6,28 @@ import Database.db_access as db_access
 db = db_access.DBHelper()
 
 def getDocs():
-    query = "SELECT * FROM docs"
-    return db.fetch(query)
+    func = db.select([], "docs", [], [""])
+    return func()
 
 def getDoc(CF):
-    query = "SELECT * FROM docs WHERE CF = '" + CF + "'"
-    return db.fetch(query)
+    func = db.select([], "docs", [("CF", "=", CF)], [""])
+    return func()
 
-def getDocAssignment(data):
-    if len(data) == 0:
-        query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l INNER JOIN docs AS d ON l.CF = d.CF"
-    elif len(data) == 1:
-        if type(data[0]) == str:
-            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
-            query += "INNER JOIN docs AS d ON l.CF = d.CF WHERE d.CF = '" + data[0] + "'"
-        else:
-            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
-            query += "INNER JOIN docs AS d ON l.CF = d.CF WHERE l.id = " + str(data[0])
-    else:
-        if type(data[0]) == str:
-            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
-            query += "INNER JOIN docs AS d ON l.CF = d.CF WHERE d.CF = '" + data[0] + "' AND l.id = " + str(data[1])
-        else:
-            query = "SELECT l.id, l.day, d.CF, d.name, d.surname, d.phone, d.mail FROM docs_list AS l "
-            query +="INNER JOIN docs AS d ON l.CF = d.CF WHERE d.CF = '" + data[1] + "' AND l.id = " + str(data[0])
-    return db.fetch(query)
+def getDocAssignment(medId):
+    func1 = db.select([], "docs_list", [("id", "=", medId)], [""])
+    func2 = db.select([], "docs", [], [""])
+    return func1(), func2()
 
 def insertDoc(medId, doc, days):
     res = {}
     if getDoc(doc["CF"]) == ():
-        query = "INSERT INTO docs(CF, name, surname, phone, mail)"
-        query += " VALUES ('" + doc["CF"] + "','" + doc["name"] + "','" + doc["surname"] + "','" + doc["phone"]
-        query += "','" + doc["mail"] + "')"
-        res["docIns"] = db.execute(query)
+        func = db.insert(doc, "docs", False)
+        res["docIns"] = func()
     
     if db.startTransaction():
         for day in days:
-            query = "INSERT INTO docs_list(CF, day, id) VALUES ('" + doc["CF"] + "', '" + day + "', " + str(medId) + ")"
-            insertLink = db.transactionQuery(query)
+            func = db.insert({"CF": doc["CF"], "day": day, "id": medId}, "docs_list", True)
+            insertLink = func()
             if not insertLink:
                 res["err"] = "Doc already assig in " + day
                 return res
@@ -53,21 +37,20 @@ def insertDoc(medId, doc, days):
     return res
 
 def updateDoc(CF, doc):
-    query = "UPDATE docs SET CF = '" + doc["CF"] + "', name = '" + doc["name"] + "', surname = '" + doc["surname"]
-    query += "', phone = '" + doc["phone"] + "', mail = '" + doc["mail"] + "' WHERE CF = '" + CF + "'"
-    return db.execute(query)
+    func = db.update(doc, "docs", [("CF", "=", CF)], [""], False)
+    return func()
 
 def deleteDoc(CF):
-    query = "DELETE FROM docs WHERE CF = '" + CF + "'"
-    return db.execute(query)
+    func = db.delete("docs", [("CF", "=", CF)], [""], False)
+    return func()
 
 def dismissDoc(CF, medId):
-    query = "DELETE FROM docs_list WHERE CF = '" + CF + "' AND id = " + str(medId)
-    return db.execute(query)
+    func = db.delete("docs_list", [("CF", "=", CF), ("id", "=", medId)], ["AND", ""], False)
+    return func()
 
 def controlDismissDoc(CF):
-    query = "SELECT * FROM booking WHERE CF_M = '" + CF + "'"
-    return db.fetch(query)
+    func = db.select([], "booking", [("CF_M", "=", CF)], [""])
+    return func()
 
     
 if __name__ == "__main__":
