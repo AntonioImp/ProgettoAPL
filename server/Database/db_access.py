@@ -89,7 +89,7 @@ class DBHelper:
                     query += str(f[0]) + " " + str(f[1]) + " '" + str(f[2]) + "'"
                     if logic[i] != "":
                         query += " " + str(logic[i]) + " "
-            print(query)
+            #print(query)
             return self.fetch(query)
         return queryGenerator
 
@@ -105,7 +105,7 @@ class DBHelper:
             for v in val:
                 query += "', '" + str(v)
             query += "')"
-            print(query)
+            #print(query)
             if trans:
                 return self.transactionQuery(query)
             else:
@@ -125,7 +125,7 @@ class DBHelper:
                 query += str(f[0]) + " " + str(f[1]) + " '" + str(f[2]) + "'"
                 if logic[i] != "":
                     query += " " + str(logic[i]) + " "
-            print(query)
+            #print(query)
             if trans:
                 return self.transactionQuery(query)
             else:
@@ -140,7 +140,7 @@ class DBHelper:
                 query += str(f[0]) + " " + str(f[1]) + " '" + str(f[2]) + "'"
                 if logic[i] != "":
                     query += " " + str(logic[i]) + " "
-            print(query)
+            #print(query)
             if trans:
                 return self.transactionQuery(query)
             else:
