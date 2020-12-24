@@ -97,8 +97,9 @@ def updateMedicalcenter():
     token = request.json["token"]
     if token in session:
         medId = session[token]
+        medical = med.Medicalcenter(medId)
         medicalData = {
-            "medical_name": request.json["medical_name"],
+            "medical_name": medical.getMedicalcenter()["medical_name"],
             "p_IVA": request.json["p_IVA"],
             "phone": request.json["phone"],
             "mail": request.json["mail"],
@@ -107,7 +108,6 @@ def updateMedicalcenter():
             "street": request.json["street"],
             "n_cv": request.json["n_cv"]
         }
-        medical = med.Medicalcenter(medId)
         if medical.updateMedicalcenter(medicalData) == True:
             return "0" #->"Aggiornamento completato"
         else:
