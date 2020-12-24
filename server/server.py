@@ -98,7 +98,7 @@ def setDay():
 def getDay():
     return str(CalendarManager.getInstance().getDate())
 
-@app.route("/getallbooked")
+@app.route("/getallbooked", methods=['GET'])
 def getAllBooked():
     res = b.Booking.getAllBooked()
     json = {}
