@@ -80,17 +80,16 @@ def setDay():
     
     manager = CalendarManager.getInstance()
     manager.setDate(dt.date())
-    manager.initCalendarDict()
-    flag = None
-    with shelve.open('archive') as archive:
-        archive['manager'] = manager
-        if 'flag' in archive:
-            flag = archive['flag']
-            del archive['flag']
-        archive.close()
-    if flag != None:
-        for f in flag:
+    
+    archive = shelve.open('archive')
+    if 'flag' in archive:
+        for f in archive['flag']:
             d.Doc(f[0]).dismissDoc(f[1], manager.getDate()) #->"Elimino dottori che hanno completato la prenotazione e dovevano essere dimessi"
+        del archive['flag']
+    
+    manager.initCalendarDict()
+    archive['manager'] = manager
+    archive.close()
 
     return "0" #->"Giorno aggiornato"
 
