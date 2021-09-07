@@ -145,7 +145,7 @@ def updateTiming():
         except:
             return "-3" #->"Formato orario errato"
         if medical.updateTiming(request.json["start_time"], request.json["end_time"], request.json["default_interval"]):
-            return "0" #->"Tempistiche aggiornata"
+            return "0" #->"Tempistiche aggiornate"
         else:
             return "-1" #->"Aggiornamento fallito"
     else:
@@ -184,7 +184,7 @@ def resetPassword():
         else:
             return "-1" #->"Errore modifica password"
     else:
-        return "-2" #->"Utente non trovato"
+        return "-2" #->"Medical center non trovato"
 
 
 """ Parametri da passare al metodo delete: token, password """

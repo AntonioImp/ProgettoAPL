@@ -7,7 +7,7 @@ class DBHelper:
     def __init__(self):
         load_dotenv(dotenv_path='../.env')
 
-    def __connect__(self):
+    def __connect(self):
         self.con = pymysql.connect(host=getenv("HOSTNAME"),
                                    user=getenv("DBUSER"),
                                    password=getenv("DBPASS"),
@@ -15,15 +15,15 @@ class DBHelper:
                                    cursorclass=pymysql.cursors.DictCursor)
         self.cur = self.con.cursor()
 
-    def __disconnect__(self):
+    def __disconnect(self):
         self.con.close()
 
     def fetch(self, sql):
         try:
-            self.__connect__()
+            self.__connect()
             self.cur.execute(sql)
             result = self.cur.fetchall()
-            self.__disconnect__()
+            self.__disconnect()
             return result
         except Exception as arg:
             print(arg)
@@ -32,10 +32,10 @@ class DBHelper:
 
     def execute(self, sql):
         try:
-            self.__connect__()
+            self.__connect()
             self.cur.execute(sql)
             self.con.commit()
-            self.__disconnect__()
+            self.__disconnect()
             return True
         except Exception as arg:
             print(arg)
@@ -47,7 +47,7 @@ class DBHelper:
 
     def startTransaction(self):
         try:
-            self.__connect__()
+            self.__connect()
             return True
         except Exception as arg:
             print(arg)
@@ -65,7 +65,7 @@ class DBHelper:
     def stopTransaction(self):
         try:
             self.con.commit()
-            self.__disconnect__()
+            self.__disconnect()
             return True
         except Exception as arg:
             print(arg)

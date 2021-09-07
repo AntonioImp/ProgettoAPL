@@ -75,7 +75,7 @@ class Booking:
             else:
                 incomplete = booked[:]
                 complete = booked[:]
-                indexesI = []
+                indexesI = []  #indici degli elementi da eliminare da incomplete, indici elementi completi
                 indexesC = []
                 for i, b in enumerate(booked):
                     if b['result'] != None:

@@ -27,6 +27,11 @@ class Doc:
     
     @staticmethod
     def getDocAssignment(medId):
+        """ Retrieve the doctors (CF and day) who work for medId and
+            the doctors registered to the system. Once the list of
+            doctors has been created, it takes care of grouping the
+            working days for each doctor. """
+
         lis, docs = db_d.getDocAssignment(medId)
         union = []
         for doc in docs:
@@ -36,18 +41,18 @@ class Doc:
                     tmp.update(l)
                     union.append(tmp)
         del lis, docs
-        copyRes = [r.copy() for r in union]
-        for cr in copyRes:
+        copyRes = [r.copy() for r in union] #create copy
+        for cr in copyRes:  #delete day by each copy
             del cr["day"]
         uniqueCopyRes = []
-        for x in copyRes:
+        for x in copyRes:   #insert each doc only one times
             if x not in uniqueCopyRes:
                 uniqueCopyRes.append(x)
         del copyRes
         for cr in uniqueCopyRes:
             cr["avarage_time"] = str(cr["avarage_time"])
             cr["day"] = []
-            for d in union:
+            for d in union:     #for each doc, insert list of working day
                 if cr["CF"] == d["CF"]:
                     cr["day"].append(d["day"])
         return uniqueCopyRes

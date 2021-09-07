@@ -65,7 +65,7 @@ def getUser():
         else:
             return "-1" #->"Errore identificazione utente"
     else:
-        return "-2" #->""Autenticazione fallita""
+        return "-2" #->"Autenticazione fallita"
 
 
 """ Parametri da passare al metodo signup: dati utente, password """
@@ -164,7 +164,7 @@ def resetPassword():
                 email.quit()
             except SMTPException:
                 user.updatePassword(oldPass)
-                return "-3" #->"Errore invio mail. Password ripristinata all'originale."
+                return "-3" #->"Errore invio mail. Password ripristinata all'originale"
 
             return "0" #->"Password modificata"
         else:
